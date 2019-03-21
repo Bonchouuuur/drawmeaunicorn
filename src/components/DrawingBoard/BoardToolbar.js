@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import BoardToolbarItem from './BoardToolbarItem';
 import Modal from '../Modal/Modal';
+import tools from './tools';
 
 class BoardToolbar extends Component {
   constructor(props, context) {
@@ -17,13 +18,23 @@ class BoardToolbar extends Component {
   }
 
   render() {
-    const { style, canvas } = this.props;
+    const { style, canvas, changeSelectedTool, selectedTool } = this.props;
     const { showPicture } = this.state;
     return (
       <BoardToolbarWrapper style={style}>
-        <BoardToolbarItem>Crayon</BoardToolbarItem>
-        <BoardToolbarItem>Droite</BoardToolbarItem>
-        <BoardToolbarItem onClick={this.handleExport}>Export</BoardToolbarItem>
+        {tools.map(presetTool => (
+          <BoardToolbarItem
+            key={`tool-${presetTool.key}`}
+            onClick={() => presetTool.enable && changeSelectedTool(presetTool)}
+            isSelected={selectedTool.key === presetTool.key}
+            isDisabled={!presetTool.enable}
+          >
+            {presetTool.label}
+          </BoardToolbarItem>
+        ))}
+        <BoardToolbarItem onClick={this.handleExport} isDisabled={false}>
+          Export
+        </BoardToolbarItem>
         {showPicture && (
           <Modal
             onClose={() => this.setState({ showPicture: false })}
