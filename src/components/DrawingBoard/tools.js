@@ -2,14 +2,23 @@ export default [
   {
     label: 'Crayon',
     key: 'BOARD_PEN',
+    type: 'DRAW',
     enable: true,
     order: 1,
   },
   {
     label: 'Gomme',
     key: 'BOARD_ERASER',
-    enable: true,
+    type: 'DRAW',
+    enable: false,
     order: 2,
+  },
+  {
+    label: 'Main',
+    key: 'BOARD_MOVE',
+    type: 'MANIPULATE',
+    enable: true,
+    order: 3,
   },
   // {
   //   label: 'Ligne',

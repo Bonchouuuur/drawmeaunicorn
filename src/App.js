@@ -1,66 +1,52 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import BoardToolbar from './components/DrawingBoard/BoardToolbar';
-import Board from './components/DrawingBoard/Board';
-import tools from './components/DrawingBoard/tools';
+// import BoardToolbar from './components/DrawingBoard/BoardToolbar';
+// import Board from './components/DrawingBoard/Board';
+// import tools from './components/DrawingBoard/tools';
+import BoardScreen from './components/DrawingBoard/BoardScreen';
 
 class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      canvas: null,
-      ctx: null,
-      tool: tools[0],
+      showBoard: false,
     };
-    this.initBoard = this._initBoard.bind(this);
-    this.changeSelectedTool = this._changeSelectedTool.bind(this);
+    this.toggleBoard = this._toggleBoard.bind(this);
   }
 
-  _initBoard({ canvas, ctx }) {
-    this.setState({ canvas, ctx });
-  }
-
-  _changeSelectedTool(newTool) {
-    this.setState({ tool: newTool });
+  _toggleBoard() {
+    this.setState({ showBoard: !this.state.showBoard });
   }
 
   render() {
-    const { canvas, ctx, tool } = this.state;
+    const { showBoard } = this.state;
     return (
-      <AppWrapper>
-        <BoardContainer>
-          <BoardToolbar
-            style={{ width: 100 }}
-            ctx={ctx}
-            canvas={canvas}
-            selectedTool={tool}
-            changeSelectedTool={this.changeSelectedTool}
-          />
-          <Board
-            ctx={ctx}
-            canvas={canvas}
-            initBoard={this.initBoard}
-            selectedTool={tool}
-          />
-        </BoardContainer>
-      </AppWrapper>
+      <div>
+        <AppTitleWrapper>
+          <h1>Draw me a unicorn</h1>
+        </AppTitleWrapper>
+        <AppContainer>
+          <button onClick={this.toggleBoard}>Draw now !</button>
+          {showBoard && <BoardScreen toggleScreen={this.toggleBoard} />}
+        </AppContainer>
+      </div>
     );
   }
 }
 
-const AppWrapper = styled.div`
+const AppTitleWrapper = styled.div`
   display: flex;
-  flex: 1;
   justify-content: center;
   align-items: center;
   padding: 20px;
   background-color: #f6f6f6;
 `;
 
-const BoardContainer = styled.div`
-  height: calc(100vmin - 40px);
-  width: calc(100vmin - 40px);
+const AppContainer = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
 `;
 
 export default App;

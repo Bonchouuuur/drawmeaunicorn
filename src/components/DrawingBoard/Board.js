@@ -5,99 +5,86 @@ class Board extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      elCount: 0,
       canvasDim: null,
     };
-    this.handleMouseDown = this._handleMouseDown.bind(this);
+    this.handleStart = this._handleStart.bind(this);
     this.handleDraw = this._handleDraw.bind(this);
     this.handleEndDraw = this._handleEndDraw.bind(this);
-    this.drawLine = this._drawLine.bind(this);
-    this.exportBoard = this._exportBoard.bind(this);
-    this.line = [null, null];
-    this.canListenToMove = false;
+    this.paintLine = this._paintLine.bind(this);
+    this.getPoint = this._getPoint.bind(this);
   }
+
+  canPaint = false; // If a user touch/mouse event should draw sth
+  wrapper = null; // Store the wrapper position
+  prevPos = { x: 0, y: 0 };
 
   componentDidMount() {
     const container = this.refs.maincontainer.getBoundingClientRect();
     this.setState(
       { canvasDim: Math.min(container.width - 30, container.height - 30) },
+      // { canvasDim: Math.min(container.width, container.height) },
       () => {
         const canvas = this.refs.canvas;
         this.props.initBoard({ canvas, ctx: canvas.getContext('2d') });
+        this.wrapper = this.refs.canvascontainer.getBoundingClientRect();
       },
     );
   }
 
-  componentWillUpdate = (nextProps, nextState) => {
-    if (nextProps.selectedTool.key !== this.props.selectedTool.key) {
-      nextProps.ctx.fillStyle = 'solid';
-      nextProps.ctx.strokeStyle = '#FFF';
-      nextProps.ctx.lineWidth = 1;
-    }
-  };
-
-  _drawLine() {
-    const { ctx } = this.props;
-    ctx.beginPath();
-    ctx.moveTo(this.line[0].x, this.line[0].y);
-    ctx.lineTo(this.line[1].x, this.line[1].y);
-    ctx.stroke();
-    this.setState({ elCount: this.state.elCount + 1 });
-  }
-
-  _drawPoint({ x, y, width, height }) {
-    const { ctx } = this.props;
-    ctx.beginPath();
-    ctx.fillRect(x - 1, y - 1, width, height);
-    this.setState({ elCount: this.state.elCount + 1 });
-  }
-
-  _handleMouseDown(e) {
-    this.canListenToMove = true;
-    const { selectedTool, ctx } = this.props;
-    const wrapper = this.refs.canvascontainer.getBoundingClientRect();
-    const click = { x: e.clientX, y: e.clientY };
-    const pointInBoard = { x: click.x - wrapper.x, y: click.y - wrapper.y };
-    if (
-      selectedTool.key === 'BOARD_PEN' ||
-      selectedTool.key === 'BOARD_ERASER'
-    ) {
-      ctx.beginPath();
-      ctx.strokeRect(pointInBoard.x, pointInBoard.y, 0.5, 0.5); // We draw sth as a "point"
-      ctx.fill();
+  _handleStart(e) {
+    if (this.props.selectedTool.type === 'DRAW') {
+      this.canPaint = true;
+      this.prevPos = this.getPoint(e);
     }
   }
 
   _handleDraw(e) {
-    if (!this.canListenToMove) {
-      return true;
-    }
-    const { selectedTool, ctx } = this.props;
-    const wrapper = this.refs.canvascontainer.getBoundingClientRect();
-    const click = { x: e.clientX, y: e.clientY };
-    const pointInBoard = { x: click.x - wrapper.x, y: click.y - wrapper.y };
-    if (
-      selectedTool.key === 'BOARD_PEN' ||
-      selectedTool.key === 'BOARD_ERASER'
-    ) {
-      ctx.lineTo(pointInBoard.x, pointInBoard.y);
-      ctx.stroke();
+    if (this.canPaint) {
+      const _point = this.getPoint(e);
+      this.paintLine(this.prevPos, _point);
     }
   }
 
-  _handleEndDraw() {
-    const { selectedTool, ctx } = this.props;
-    if (
-      selectedTool.key === 'BOARD_PEN' ||
-      selectedTool.key === 'BOARD_ERASER'
-    ) {
-      ctx.closePath();
-    }
-    this.canListenToMove = false;
+  _handleEndDraw(e) {
+    this.canPaint = false;
   }
 
-  _exportBoard() {
-    console.log(this.refs.canvas.toDataURL());
+  _paintLine(from, to) {
+    const { ctx } = this.props;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(to.x, to.y);
+    ctx.stroke();
+    this.prevPos = to;
+  }
+
+  _getPoint(event) {
+    let _point = null;
+    const _type = event.dispatchConfig.dependencies[0];
+    switch (_type) {
+      case 'mousedown':
+      case 'mousemove':
+        _point = { x: event.clientX, y: event.clientY };
+        break;
+      case 'touchstart':
+      case 'touchmove':
+        _point = {
+          x: event.targetTouches[0].clientX,
+          y: event.targetTouches[0].clientY,
+        };
+        break;
+      default:
+        break;
+    }
+    return _point
+      ? {
+          x: _point.x - this.wrapper.x,
+          y: _point.y - this.wrapper.y,
+        }
+      : null;
   }
 
   render() {
@@ -105,12 +92,15 @@ class Board extends Component {
     return (
       <BoardWrapper ref="maincontainer">
         <div
-          // onClick={this.handleClick}
-          onMouseDown={this.handleMouseDown}
+          onMouseDown={this.handleStart}
           onMouseMove={this.handleDraw}
           onMouseOut={this.handleEndDraw}
           onMouseUp={this.handleEndDraw}
+          onTouchStart={this.handleStart}
+          onTouchMove={this.handleDraw}
+          onTouchEnd={this.handleEndDraw}
           ref="canvascontainer"
+          style={{ backgroundColor: 'green' }}
         >
           {canvasDim && (
             <canvas ref="canvas" width={canvasDim} height={canvasDim} />
@@ -125,10 +115,13 @@ const BoardWrapper = styled.div`
   /* background-color: white; */
   background-color: cyan;
   flex: 2;
+  height: 100%;
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* padding: 15px; */
+  /* margin: 15px; */
   canvas {
     /* background-color: #f6f6f6; */
     background-color: pink;
