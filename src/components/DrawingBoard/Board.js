@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+// import { PinchView } from 'react-pinch-zoom-pan';
+import PinchableView from '../PinchableView/PinchableView';
 
 class Board extends Component {
   constructor(props, context) {
@@ -87,25 +89,46 @@ class Board extends Component {
       : null;
   }
 
+  _getContainerStyle(ratio) {
+    return {
+      paddingTop: ratio.toFixed(2) + '%',
+      // paddingTop: '100%',
+      overflow: 'hidden',
+      position: 'relative',
+      backgroundColor: 'yellow',
+    };
+  }
+
   render() {
     const { canvasDim } = this.state;
+    const { height, width, selectedTool } = this.props;
+    const ratio = (height / width) * 100;
     return (
-      <BoardWrapper ref="maincontainer">
-        <div
-          onMouseDown={this.handleStart}
-          onMouseMove={this.handleDraw}
-          onMouseOut={this.handleEndDraw}
-          onMouseUp={this.handleEndDraw}
-          onTouchStart={this.handleStart}
-          onTouchMove={this.handleDraw}
-          onTouchEnd={this.handleEndDraw}
-          ref="canvascontainer"
-          style={{ backgroundColor: 'green' }}
+      <BoardWrapper ref="maincontainer" style={this._getContainerStyle(ratio)}>
+        <PinchableView
+          // debug
+          backgroundColor="#ddd"
+          maxScale={4}
+          // containerRatio={(400 / 600) * 100}
+          containerRatio={100}
+          enableManipulation={selectedTool.type === 'MANIPULATE'}
         >
-          {canvasDim && (
-            <canvas ref="canvas" width={canvasDim} height={canvasDim} />
-          )}
-        </div>
+          <div
+            onMouseDown={this.handleStart}
+            onMouseMove={this.handleDraw}
+            onMouseOut={this.handleEndDraw}
+            onMouseUp={this.handleEndDraw}
+            onTouchStart={this.handleStart}
+            onTouchMove={this.handleDraw}
+            onTouchEnd={this.handleEndDraw}
+            ref="canvascontainer"
+            style={{ backgroundColor: 'green' }}
+          >
+            {canvasDim && (
+              <canvas ref="canvas" width={canvasDim} height={canvasDim} />
+            )}
+          </div>
+        </PinchableView>
       </BoardWrapper>
     );
   }
@@ -114,10 +137,10 @@ class Board extends Component {
 const BoardWrapper = styled.div`
   /* background-color: white; */
   background-color: cyan;
-  flex: 2;
+  /* flex: 2; */
   height: 100%;
   width: 100%;
-  display: flex;
+  /* display: flex; */
   /* align-items: center; */
   /* justify-content: center; */
   /* padding: 15px; */
@@ -125,6 +148,8 @@ const BoardWrapper = styled.div`
   canvas {
     /* background-color: #f6f6f6; */
     background-color: pink;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
