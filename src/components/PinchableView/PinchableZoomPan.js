@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 // import { fromEvent } from 'rxjs';
 import throttle from 'lodash.throttle';
 import 'rxjs/add/observable/fromEvent';
