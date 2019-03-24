@@ -75,7 +75,6 @@ class CanvasWrapper extends Component {
         onTouchEnd={this.onTouchEnd}
         onWheel={this.onWheel}
         ref="canvascontainer"
-        style={{ backgroundColor: 'green' }}
       >
         <canvas
           ref="canvas"

@@ -65,15 +65,6 @@ class Board extends Component {
     this.prevPos = to;
   }
 
-  _getContainerStyle(ratio) {
-    return {
-      paddingTop: ratio.toFixed(2) + '%',
-      overflow: 'hidden',
-      position: 'relative',
-      backgroundColor: 'yellow',
-    };
-  }
-
   _initBoard({ canvas, wrapper }) {
     this.props.initBoard({ canvas, ctx: canvas.getContext('2d') });
     this.wrapper = wrapper.getBoundingClientRect();
@@ -103,10 +94,9 @@ class Board extends Component {
 
   render() {
     const { canvasDim } = this.state;
-    const { height, width, selectedTool } = this.props;
-    const ratio = (height / width) * 100;
+    const { selectedTool } = this.props;
     return (
-      <BoardWrapper ref="maincontainer" style={this._getContainerStyle(ratio)}>
+      <BoardWrapper ref="maincontainer">
         <PinchableView
           backgroundColor="#ddd"
           maxScale={SCALES.max}
@@ -139,19 +129,12 @@ class Board extends Component {
 }
 
 const BoardWrapper = styled.div`
-  /* background-color: white; */
-  background-color: cyan;
-  /* flex: 2; */
   height: 100%;
   width: 100%;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* padding: 15px; */
-  /* margin: 15px; */
+  overflow: hidden;
+  position: relative;
   canvas {
-    /* background-color: #f6f6f6; */
-    background-color: pink;
+    background-color: white;
     margin-left: auto;
     margin-right: auto;
   }

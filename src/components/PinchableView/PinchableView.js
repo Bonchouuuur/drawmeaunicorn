@@ -21,9 +21,6 @@ const PinchableView = ({
     render={obj => {
       return (
         <MainContainerStyled className={holderClassName}>
-          <p style={{ position: 'fixed', top: 0, zIndex: 9999 }}>
-            {obj.scale} ; {obj.x}|{obj.y}
-          </p>
           <ContainerStyled className={containerClassName}>
             <SubContainerStyled>
               <MainContentStyled obj={obj}>{children}</MainContentStyled>
@@ -46,7 +43,7 @@ const ContainerStyled = styled.div`
   padding-top: 100%;
   overflow: hidden;
   position: relative;
-  background: '#f2f2f2';
+  background-color: #f2f2f2;
 `;
 
 const SubContainerStyled = styled.div`
@@ -63,7 +60,7 @@ const MainContentStyled = styled.div`
   align-items: center;
   justify-content: center;
   padding: 10px;
-  background-color: purple;
+  /* background-color: purple; */
   transform: scale(${props => props.obj.scale})
     translateY(${props => props.obj.y}px) translateX(${props => props.obj.x}px);
   transition: 0.3s ease-out;
