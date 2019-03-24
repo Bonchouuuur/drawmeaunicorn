@@ -21,6 +21,9 @@ const PinchableView = ({
     render={obj => {
       return (
         <MainContainerStyled className={holderClassName}>
+          <p style={{ position: 'fixed', top: 0, zIndex: 9999 }}>
+            {obj.scale} ; {obj.x}|{obj.y}
+          </p>
           <ContainerStyled className={containerClassName}>
             <SubContainerStyled>
               <MainContentStyled obj={obj}>{children}</MainContentStyled>

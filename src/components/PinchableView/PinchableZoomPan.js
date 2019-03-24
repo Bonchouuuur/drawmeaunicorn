@@ -91,12 +91,12 @@ class PinchableZoomPan extends Component {
   }
 
   // Think about sth that can reset the zoom
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.state.obj.scale !== nextProps.initialScale) {
-  //     const obj = { ...this.state.obj, scale: nextProps.initialScale };
-  //     this.setState({ obj });
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (this.state.obj.scale !== nextProps.initialScale) {
+      const obj = { ...this.state.obj, scale: nextProps.initialScale };
+      this.setState({ obj });
+    }
+  }
 
   handlePinch() {
     const domNode = this.root;
@@ -193,7 +193,7 @@ class PinchableZoomPan extends Component {
       });
 
     this.pinchSubscription = pinch.subscribe(newObject => {
-      if (this.state.obj.scale !== newObject.scale) {
+      if (!!newObject.scale && this.state.obj.scale !== newObject.scale) {
         this.refreshPinchTimeoutTimer();
       }
       global.requestAnimationFrame(() => {
@@ -208,11 +208,9 @@ class PinchableZoomPan extends Component {
     if (this.pinchTimeoutTimer) {
       clearTimeout(this.pinchTimeoutTimer);
     }
-
     if (!this.state.isPinching) {
       this.pinchStarted();
     }
-
     this.pinchTimeoutTimer = setTimeout(() => this.pinchStopped(), 500);
   }
 
@@ -224,7 +222,7 @@ class PinchableZoomPan extends Component {
         },
         () => {
           this.pinchTimeoutTimer = null;
-          this.props.onPinchStop && this.props.onPinchStop();
+          this.props.onPinchStop && this.props.onPinchStop(this.state.obj);
         },
       );
     }

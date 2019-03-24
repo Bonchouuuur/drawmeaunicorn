@@ -7,6 +7,7 @@
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
+    "react-cursor-position": "^3.0.3",
     "react-dom": "^16.8.4",
     "react-pinch-zoom-pan": "^1.4.5",
     "react-scripts": "2.1.8",
