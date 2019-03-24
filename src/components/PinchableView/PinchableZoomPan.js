@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { Observable } from 'rxjs/Observable';
-import { fromEvent } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+// import { fromEvent } from 'rxjs';
 import throttle from 'lodash.throttle';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
@@ -101,12 +101,18 @@ class PinchableZoomPan extends Component {
 
   handlePinch() {
     const domNode = this.root;
-    const touchStart = fromEvent(
+    const touchStart = Observable.fromEvent(
       domNode,
       isTouch() ? 'touchstart' : 'mousedown',
     );
-    const touchMove = fromEvent(window, isTouch() ? 'touchmove' : 'mousemove');
-    const touchEnd = fromEvent(window, isTouch() ? 'touchend' : 'mouseup');
+    const touchMove = Observable.fromEvent(
+      window,
+      isTouch() ? 'touchmove' : 'mousemove',
+    );
+    const touchEnd = Observable.fromEvent(
+      window,
+      isTouch() ? 'touchend' : 'mouseup',
+    );
 
     function translatePos(point, size) {
       return {
