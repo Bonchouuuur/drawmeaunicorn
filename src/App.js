@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-// import BoardToolbar from './components/DrawingBoard/BoardToolbar';
-// import Board from './components/DrawingBoard/Board';
-// import tools from './components/DrawingBoard/tools';
 import BoardScreen from './components/DrawingBoard/BoardScreen';
 
 class App extends Component {
@@ -27,7 +24,7 @@ class App extends Component {
         </AppTitleWrapper>
         <AppContainer>
           <button onClick={this.toggleBoard}>Draw now !</button>
-          {showBoard && <BoardScreen toggleScreen={this.toggleBoard} />}
+          {showBoard && <BoardScreen onSave={this.toggleBoard} />}
         </AppContainer>
       </div>
     );

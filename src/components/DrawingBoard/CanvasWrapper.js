@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class CanvasWrapper extends Component {
   constructor(props, context) {
@@ -50,6 +51,7 @@ class CanvasWrapper extends Component {
   }
 
   _onTouchEnd(e) {
+    this.touchMap = null;
     this.props.onTouchEnd && this.props.onTouchEnd(e, this.getScaledPosition());
   }
 
@@ -64,26 +66,47 @@ class CanvasWrapper extends Component {
   }
 
   render() {
+    const { canvasDim } = this.props;
     return (
-      <div
-        onMouseDown={this.onMouseDown}
-        onMouseMove={this.onMouseMove}
-        onMouseOut={this.onMouseOut}
-        onMouseUp={this.onMouseUp}
-        onTouchStart={this.onTouchStart}
-        onTouchMove={this.onTouchMove}
-        onTouchEnd={this.onTouchEnd}
-        onWheel={this.onWheel}
-        ref="canvascontainer"
-      >
+      <div ref="canvascontainer">
         <canvas
           ref="canvas"
-          width={this.props.canvasDim}
-          height={this.props.canvasDim}
+          onMouseDown={this.onMouseDown}
+          onMouseMove={this.onMouseMove}
+          onMouseOut={this.onMouseOut}
+          onMouseUp={this.onMouseUp}
+          onTouchStart={this.onTouchStart}
+          onTouchMove={this.onTouchMove}
+          onTouchEnd={this.onTouchEnd}
+          onWheel={this.onWheel}
+          width={canvasDim}
+          height={canvasDim}
         />
       </div>
     );
   }
 }
+
+CanvasWrapper.propTypes = {
+  canvasDim: PropTypes.number.isRequired,
+  initBoard: PropTypes.func.isRequired,
+  onMouseDown: PropTypes.func,
+  onMouseMove: PropTypes.func,
+  onMouseOut: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchMove: PropTypes.func,
+  onTouchEnd: PropTypes.func,
+  onWheel: PropTypes.func,
+};
+
+CanvasWrapper.defaultProps = {
+  onMouseDown: null,
+  onMouseMove: null,
+  onMouseOut: null,
+  onTouchStart: null,
+  onTouchMove: null,
+  onTouchEnd: null,
+  onWheel: null,
+};
 
 export default CanvasWrapper;

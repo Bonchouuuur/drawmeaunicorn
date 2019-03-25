@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import classNames from 'classnames';
 
@@ -30,5 +31,11 @@ const BoardToolbarItemWrapper = styled.div`
     cursor: not-allowed;
   }
 `;
+
+BoardToolbarItem.propTypes = {
+  onClick: PropTypes.func,
+  isSelected: PropTypes.bool,
+  isDisabled: PropTypes.bool,
+};
 
 export default BoardToolbarItem;

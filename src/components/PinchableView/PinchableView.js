@@ -59,8 +59,6 @@ const MainContentStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  /* background-color: purple; */
   transform: scale(${props => props.obj.scale})
     translateY(${props => props.obj.y}px) translateX(${props => props.obj.x}px);
   transition: 0.3s ease-out;

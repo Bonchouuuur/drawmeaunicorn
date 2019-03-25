@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Observable } from 'rxjs/Rx';
-// import { fromEvent } from 'rxjs';
 import throttle from 'lodash.throttle';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
@@ -91,7 +90,6 @@ class PinchableZoomPan extends Component {
     global.addEventListener('resize', this.resizeThrottled);
   }
 
-  // Think about sth that can reset the zoom
   componentWillReceiveProps(nextProps) {
     if (this.state.obj.scale !== nextProps.initialScale) {
       const obj = { ...this.state.obj, scale: nextProps.initialScale };
@@ -128,11 +126,8 @@ class PinchableZoomPan extends Component {
       .do(event => {
         if (this.props.enableManipulation) {
           const { scale } = this.state.obj;
-          // record x,y when touch starts
           startX = this.state.obj.x;
           startY = this.state.obj.y;
-
-          // allow page scrolling - ignore events unless they are beginning pinch or have previously pinch zoomed
           if (hasTwoTouchPoints(event) || isZoomed(scale)) {
             eventPreventDefault(event);
           }
@@ -192,7 +187,6 @@ class PinchableZoomPan extends Component {
           return touchMove;
         }
       });
-
     this.pinchSubscription = pinch.subscribe(newObject => {
       if (!!newObject.scale && this.state.obj.scale !== newObject.scale) {
         this.refreshPinchTimeoutTimer();

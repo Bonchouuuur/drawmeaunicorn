@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ModalHeader from './ModalHeader';
 import ModalFooter from './ModalFooter';
@@ -38,5 +39,10 @@ const ModalContainer = styled.div`
   background-color: white;
   padding: 5px;
 `;
+
+Modal.propTypes = {
+  onClose: PropTypes.func,
+  title: PropTypes.string,
+};
 
 export default Modal;

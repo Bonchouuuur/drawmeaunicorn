@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import BoardToolbarItem from './BoardToolbarItem';
 import Modal from '../Modal/Modal';
@@ -18,7 +19,7 @@ class BoardToolbar extends Component {
   }
 
   render() {
-    const { style, canvas, changeSelectedTool, selectedTool, ctx } = this.props;
+    const { style, canvas, switchSelectedTool, selectedTool, ctx } = this.props;
     const { showPicture } = this.state;
     return (
       <BoardToolbarWrapper style={style}>
@@ -29,7 +30,7 @@ class BoardToolbar extends Component {
               tool.onClick && tool.onClick({ canvas, ctx });
               tool.enable &&
                 tool.type !== 'BOARD_ACTION' &&
-                changeSelectedTool(tool);
+                switchSelectedTool(tool);
               tool.enable && tool.key === 'BOARD_EXPORT' && this.handleExport();
             }}
             isSelected={selectedTool.key === tool.key}
@@ -72,5 +73,12 @@ const BoardToolbarWrapper = styled.div`
   align-items: center;
   height: 70px;
 `;
+
+BoardToolbar.propTypes = {
+  ctx: PropTypes.objectOf(CanvasRenderingContext2D),
+  canvas: PropTypes.instanceOf(Element),
+  selectedTool: PropTypes.object,
+  switchSelectedTool: PropTypes.func,
+};
 
 export default BoardToolbar;

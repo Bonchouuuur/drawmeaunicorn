@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import PinchableView from '../PinchableView/PinchableView';
-import ReactCursorPosition from 'react-cursor-position';
+import ReactCursorPosition, { INTERACTIONS } from 'react-cursor-position';
 import CanvasWrapper from './CanvasWrapper';
 
 const SCALES = {
@@ -106,7 +107,9 @@ class Board extends Component {
           onPinchStop={this.handlePinchStop}
         >
           {canvasDim && (
-            <ReactCursorPosition>
+            <ReactCursorPosition
+              activationInteractionTouch={INTERACTIONS.TOUCH}
+            >
               <CanvasWrapper
                 onMouseDown={this.handleStart}
                 onMouseMove={this.handleDraw}
@@ -139,5 +142,14 @@ const BoardWrapper = styled.div`
     margin-right: auto;
   }
 `;
+
+Board.propTypes = {
+  initBoard: PropTypes.func,
+  ctx: PropTypes.objectOf(CanvasRenderingContext2D),
+  canvas: PropTypes.instanceOf(Element),
+  selectedTool: PropTypes.object,
+};
+
+Board.defaultProps = {};
 
 export default Board;
