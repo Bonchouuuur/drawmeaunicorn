@@ -1,6 +1,6 @@
 export default [
   {
-    label: 'Crayon',
+    label: 'Pen',
     key: 'BOARD_PEN',
     type: 'DRAW',
     enable: true,
@@ -10,7 +10,7 @@ export default [
     },
   },
   {
-    label: 'Gomme',
+    label: 'Eraser',
     key: 'BOARD_ERASER',
     type: 'DRAW',
     enable: true,
@@ -20,14 +20,14 @@ export default [
     },
   },
   {
-    label: 'Main',
+    label: 'Hand',
     key: 'BOARD_MOVE',
     type: 'MANIPULATE',
     enable: true,
     order: 3,
   },
   {
-    label: 'Vider',
+    label: 'Clear',
     key: 'BOARD_CLEAR',
     type: 'ACTION',
     enable: true,
