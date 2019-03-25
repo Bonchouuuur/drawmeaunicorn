@@ -4,25 +4,15 @@ import PropTypes from 'prop-types';
 import tools from './tools';
 import BoardToolbar from './BoardToolbar';
 import Board from './Board';
+import { withBoard } from './BoardProvider';
 
 class BoardScreen extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      canvas: null,
-      ctx: null,
       tool: tools[0],
     };
-    this.initBoard = this._initBoard.bind(this);
     this.handleSwitchSelectedTool = this._handleSwitchSelectedTool.bind(this);
-  }
-
-  _initBoard({ canvas, ctx }) {
-    this.setState({ canvas, ctx });
-    ctx.beginPath();
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.closePath();
   }
 
   _handleSwitchSelectedTool(newTool) {
@@ -30,21 +20,14 @@ class BoardScreen extends Component {
   }
 
   render() {
-    const { canvas, ctx, tool } = this.state;
+    const { tool } = this.state;
     return (
       <BoardScreenStyled>
         <BoardToolbar
-          ctx={ctx}
-          canvas={canvas}
           selectedTool={tool}
           switchSelectedTool={this.handleSwitchSelectedTool}
         />
-        <Board
-          ctx={ctx}
-          canvas={canvas}
-          initBoard={this.initBoard}
-          selectedTool={tool}
-        />
+        <Board />
       </BoardScreenStyled>
     );
   }
@@ -76,4 +59,4 @@ BoardScreen.defaultProps = {
   onSave: null,
 };
 
-export default BoardScreen;
+export default withBoard(BoardScreen);

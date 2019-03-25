@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PinchableView from '../PinchableView/PinchableView';
 import ReactCursorPosition, { INTERACTIONS } from 'react-cursor-position';
 import CanvasWrapper from './CanvasWrapper';
+import { withBoard } from './BoardProvider';
 
 const SCALES = {
   min: 1,
@@ -23,12 +24,11 @@ class Board extends Component {
     this.handleScroll = this._handleScroll.bind(this);
     this.paintLine = this._paintLine.bind(this);
     this.handlePinchStop = this._handlePinchStop.bind(this);
-    this.initBoard = this._initBoard.bind(this);
   }
 
-  canPaint = false; // If a user touch/mouse event should draw sth
-  wrapper = null; // Store the wrapper position
+  canPaint = false;
   prevPos = { x: 0, y: 0 };
+  ctxBeforeAction = null;
 
   componentDidMount() {
     const container = this.refs.maincontainer.getBoundingClientRect();
@@ -39,6 +39,7 @@ class Board extends Component {
 
   _handleStart(e, point) {
     if (this.props.selectedTool.type === 'DRAW') {
+      this.ctxBeforeAction = this.props.canvas.toDataURL();
       this.canPaint = true;
       this.prevPos = point;
     }
@@ -51,7 +52,15 @@ class Board extends Component {
   }
 
   _handleEndDraw(e) {
-    this.canPaint = false;
+    if (this.canPaint) {
+      this.canPaint = false;
+      this.props.updateBoard({
+        undoList: [...this.props.undoList, this.ctxBeforeAction],
+        redoList: [],
+        redrawedImg: this.props.canvas.toDataURL(),
+      });
+      this.ctxBeforeAction = null;
+    }
   }
 
   _paintLine(from, to) {
@@ -64,11 +73,6 @@ class Board extends Component {
     ctx.lineTo(to.x, to.y);
     ctx.stroke();
     this.prevPos = to;
-  }
-
-  _initBoard({ canvas, wrapper }) {
-    this.props.initBoard({ canvas, ctx: canvas.getContext('2d') });
-    this.wrapper = wrapper.getBoundingClientRect();
   }
 
   _handlePinchStop(obj) {
@@ -119,7 +123,6 @@ class Board extends Component {
                 onTouchMove={this.handleDraw}
                 onTouchEnd={this.handleEndDraw}
                 canvasDim={canvasDim}
-                initBoard={this.initBoard}
                 scaleObject={this.state.pinchObj}
                 onWheel={this.handleScroll}
               />
@@ -144,12 +147,9 @@ const BoardWrapper = styled.div`
 `;
 
 Board.propTypes = {
-  initBoard: PropTypes.func,
   ctx: PropTypes.objectOf(CanvasRenderingContext2D),
   canvas: PropTypes.instanceOf(Element),
   selectedTool: PropTypes.object,
 };
 
-Board.defaultProps = {};
-
-export default Board;
+export default withBoard(Board);

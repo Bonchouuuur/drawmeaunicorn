@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import BoardToolbarItem from './BoardToolbarItem';
 import Modal from '../Modal/Modal';
 import tools from './tools';
+import { withBoard } from './BoardProvider';
 
 class BoardToolbar extends Component {
   constructor(props, context) {
@@ -19,7 +20,16 @@ class BoardToolbar extends Component {
   }
 
   render() {
-    const { style, canvas, switchSelectedTool, selectedTool, ctx } = this.props;
+    const {
+      style,
+      canvas,
+      switchSelectedTool,
+      selectedTool,
+      ctx,
+      handleUndo,
+      handleRedo,
+      handleClear,
+    } = this.props;
     const { showPicture } = this.state;
     return (
       <BoardToolbarWrapper style={style}>
@@ -30,9 +40,25 @@ class BoardToolbar extends Component {
               tool.onClick && tool.onClick({ canvas, ctx });
               tool.enable && tool.type !== 'ACTION' && switchSelectedTool(tool);
               tool.enable && tool.key === 'BOARD_EXPORT' && this.handleExport();
+              tool.key === 'BOARD_UNDO' &&
+                tool.enable &&
+                handleUndo &&
+                handleUndo();
+              tool.key === 'BOARD_REDO' &&
+                tool.enable &&
+                handleRedo &&
+                handleRedo();
+              tool.key === 'BOARD_CLEAR' &&
+                tool.enable &&
+                handleClear &&
+                handleClear();
             }}
             isSelected={selectedTool.key === tool.key}
-            isDisabled={!tool.enable}
+            isDisabled={
+              !tool.enable ||
+              (tool.key === 'BOARD_UNDO' && this.props.undoList.length === 0) ||
+              (tool.key === 'BOARD_REDO' && this.props.redoList.length === 0)
+            }
           >
             {tool.label}
           </BoardToolbarItem>
@@ -77,6 +103,8 @@ BoardToolbar.propTypes = {
   canvas: PropTypes.instanceOf(Element),
   selectedTool: PropTypes.object,
   switchSelectedTool: PropTypes.func,
+  boardUndo: PropTypes.func,
+  boardRedo: PropTypes.func,
 };
 
-export default BoardToolbar;
+export default withBoard(BoardToolbar);

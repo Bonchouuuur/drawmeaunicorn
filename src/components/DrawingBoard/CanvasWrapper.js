@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withBoard } from './BoardProvider';
 
 class CanvasWrapper extends Component {
   constructor(props, context) {
@@ -16,10 +17,16 @@ class CanvasWrapper extends Component {
   }
 
   componentDidMount() {
+    const canvas = this.refs.canvas;
+    const ctx = this.refs.canvas.getContext('2d');
     this.props.initBoard({
-      canvas: this.refs.canvas,
-      wrapper: this.refs.canvascontainer,
+      canvas,
+      ctx,
     });
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.closePath();
   }
 
   _onMouseDown(e) {
@@ -68,28 +75,26 @@ class CanvasWrapper extends Component {
   render() {
     const { canvasDim } = this.props;
     return (
-      <div ref="canvascontainer">
-        <canvas
-          ref="canvas"
-          onMouseDown={this.onMouseDown}
-          onMouseMove={this.onMouseMove}
-          onMouseOut={this.onMouseOut}
-          onMouseUp={this.onMouseUp}
-          onTouchStart={this.onTouchStart}
-          onTouchMove={this.onTouchMove}
-          onTouchEnd={this.onTouchEnd}
-          onWheel={this.onWheel}
-          width={canvasDim}
-          height={canvasDim}
-        />
-      </div>
+      <canvas
+        ref="canvas"
+        onMouseDown={this.onMouseDown}
+        onMouseMove={this.onMouseMove}
+        onMouseOut={this.onMouseOut}
+        onMouseUp={this.onMouseUp}
+        onTouchStart={this.onTouchStart}
+        onTouchMove={this.onTouchMove}
+        onTouchEnd={this.onTouchEnd}
+        onWheel={this.onWheel}
+        width={canvasDim}
+        height={canvasDim}
+      />
     );
   }
 }
 
 CanvasWrapper.propTypes = {
-  canvasDim: PropTypes.number.isRequired,
-  initBoard: PropTypes.func.isRequired,
+  // canvasDim: PropTypes.number.isRequired,
+  // initBoard: PropTypes.func.isRequired,
   onMouseDown: PropTypes.func,
   onMouseMove: PropTypes.func,
   onMouseOut: PropTypes.func,
@@ -109,4 +114,4 @@ CanvasWrapper.defaultProps = {
   onWheel: null,
 };
 
-export default CanvasWrapper;
+export default withBoard(CanvasWrapper);

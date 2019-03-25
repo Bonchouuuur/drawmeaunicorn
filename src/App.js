@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import BoardScreen from './components/DrawingBoard/BoardScreen';
+import BoardProvider from './components/DrawingBoard/BoardProvider';
 
 class App extends Component {
   constructor(props, context) {
@@ -24,7 +25,11 @@ class App extends Component {
         </AppTitleWrapper>
         <AppContainer>
           <button onClick={this.toggleBoard}>Draw now !</button>
-          {showBoard && <BoardScreen onSave={this.toggleBoard} />}
+          {showBoard && (
+            <BoardProvider>
+              <BoardScreen onSave={this.toggleBoard} />
+            </BoardProvider>
+          )}
         </AppContainer>
       </div>
     );
