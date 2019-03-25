@@ -5,15 +5,19 @@ export default [
     type: 'DRAW',
     enable: true,
     order: 1,
-    // onClick: function({canvas, ctx}) {
-    // }
+    onClick: function({ canvas, ctx }) {
+      ctx.strokeStyle = 'black';
+    },
   },
   {
     label: 'Gomme',
     key: 'BOARD_ERASER',
     type: 'DRAW',
-    enable: false,
+    enable: true,
     order: 2,
+    onClick: function({ canvas, ctx }) {
+      ctx.strokeStyle = 'white';
+    },
   },
   {
     label: 'Main',
@@ -25,7 +29,7 @@ export default [
   {
     label: 'Vider',
     key: 'BOARD_CLEAR',
-    type: 'BOARD_ACTION',
+    type: 'ACTION',
     enable: true,
     order: 4,
     onClick: function({ canvas, ctx }) {
@@ -39,22 +43,4 @@ export default [
     enable: true,
     order: 5,
   },
-  // {
-  //   label: 'Ligne',
-  //   key: 'BOARD_LINE',
-  //   enable: false,
-  //   order: 3,
-  // },
-  // {
-  //   label: 'Rectangle',
-  //   key: 'BOARD_RECT',
-  //   enable: false,
-  //   order: 3,
-  // },
-  // {
-  //   label: 'Déplacer',
-  //   key: 'BOARD_MOVE',
-  //   enable: false,
-  //   order: 4,
-  // },
 ];
