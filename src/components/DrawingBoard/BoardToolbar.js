@@ -28,9 +28,7 @@ class BoardToolbar extends Component {
             key={`tool-${tool.key}`}
             onClick={() => {
               tool.onClick && tool.onClick({ canvas, ctx });
-              tool.enable &&
-                tool.type !== 'BOARD_ACTION' &&
-                switchSelectedTool(tool);
+              tool.enable && tool.type !== 'ACTION' && switchSelectedTool(tool);
               tool.enable && tool.key === 'BOARD_EXPORT' && this.handleExport();
             }}
             isSelected={selectedTool.key === tool.key}

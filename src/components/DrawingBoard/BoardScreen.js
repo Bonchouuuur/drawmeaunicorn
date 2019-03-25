@@ -19,6 +19,10 @@ class BoardScreen extends Component {
 
   _initBoard({ canvas, ctx }) {
     this.setState({ canvas, ctx });
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.closePath();
   }
 
   _handleSwitchSelectedTool(newTool) {
