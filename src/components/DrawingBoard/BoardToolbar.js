@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import BoardToolbarItem from './BoardToolbarItem';
 import Modal from '../Modal/Modal';
@@ -11,43 +12,33 @@ class BoardToolbar extends Component {
       showPicture: false,
     };
     this.handleExport = this._handleExport.bind(this);
-    this.handleClear = this._handleClear.bind(this);
   }
 
   _handleExport() {
     this.setState({ showPicture: true });
   }
 
-  _handleClear() {
-    this.props.ctx.clearRect(
-      0,
-      0,
-      this.props.canvas.width,
-      this.props.canvas.height,
-    );
-  }
-
   render() {
-    const { style, canvas, changeSelectedTool, selectedTool } = this.props;
+    const { style, canvas, switchSelectedTool, selectedTool, ctx } = this.props;
     const { showPicture } = this.state;
     return (
       <BoardToolbarWrapper style={style}>
-        {tools.map(presetTool => (
+        {tools.map(tool => (
           <BoardToolbarItem
-            key={`tool-${presetTool.key}`}
-            onClick={() => presetTool.enable && changeSelectedTool(presetTool)}
-            isSelected={selectedTool.key === presetTool.key}
-            isDisabled={!presetTool.enable}
+            key={`tool-${tool.key}`}
+            onClick={() => {
+              tool.onClick && tool.onClick({ canvas, ctx });
+              tool.enable &&
+                tool.type !== 'BOARD_ACTION' &&
+                switchSelectedTool(tool);
+              tool.enable && tool.key === 'BOARD_EXPORT' && this.handleExport();
+            }}
+            isSelected={selectedTool.key === tool.key}
+            isDisabled={!tool.enable}
           >
-            {presetTool.label}
+            {tool.label}
           </BoardToolbarItem>
         ))}
-        <BoardToolbarItem onClick={this.handleClear} isDisabled={false}>
-          Vider
-        </BoardToolbarItem>
-        <BoardToolbarItem onClick={this.handleExport} isDisabled={false}>
-          Export
-        </BoardToolbarItem>
         {showPicture && (
           <Modal
             onClose={() => this.setState({ showPicture: false })}
@@ -64,7 +55,7 @@ class BoardToolbar extends Component {
               <img
                 src={canvas.toDataURL()}
                 alt="Draw representation"
-                width="400"
+                width="200"
               />
             </div>
           </Modal>
@@ -82,5 +73,12 @@ const BoardToolbarWrapper = styled.div`
   align-items: center;
   height: 70px;
 `;
+
+BoardToolbar.propTypes = {
+  ctx: PropTypes.objectOf(CanvasRenderingContext2D),
+  canvas: PropTypes.instanceOf(Element),
+  selectedTool: PropTypes.object,
+  switchSelectedTool: PropTypes.func,
+};
 
 export default BoardToolbar;
