@@ -12,6 +12,7 @@ export default class BoardProvider extends Component {
     this.handleUndo = this._handleUndo.bind(this);
     this.handleRedo = this._handleRedo.bind(this);
     this.handleClear = this._handleClear.bind(this);
+    this.switchSelectedTool = this._switchSelectedTool.bind(this);
   }
 
   state = {
@@ -80,6 +81,10 @@ export default class BoardProvider extends Component {
     });
   }
 
+  _switchSelectedTool(newTool) {
+    this.setState({ selectedTool: newTool });
+  }
+
   render() {
     const { redrawedImg } = this.state;
     return (
@@ -91,6 +96,7 @@ export default class BoardProvider extends Component {
           handleUndo: this.handleUndo,
           handleRedo: this.handleRedo,
           handleClear: this.handleClear,
+          switchSelectedTool: this.switchSelectedTool,
         }}
       >
         {this.props.children}

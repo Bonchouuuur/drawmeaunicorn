@@ -1,37 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import tools from './tools';
 import BoardToolbar from './BoardToolbar';
 import Board from './Board';
 import { withBoard } from './BoardProvider';
 
-class BoardScreen extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      tool: tools[0],
-    };
-    this.handleSwitchSelectedTool = this._handleSwitchSelectedTool.bind(this);
-  }
-
-  _handleSwitchSelectedTool(newTool) {
-    this.setState({ tool: newTool });
-  }
-
-  render() {
-    const { tool } = this.state;
-    return (
-      <BoardScreenStyled>
-        <BoardToolbar
-          selectedTool={tool}
-          switchSelectedTool={this.handleSwitchSelectedTool}
-        />
-        <Board />
-      </BoardScreenStyled>
-    );
-  }
-}
+const BoardScreen = () => (
+  <BoardScreenStyled>
+    <BoardToolbar />
+    <Board />
+  </BoardScreenStyled>
+);
 
 const BoardScreenStyled = styled.div`
   position: fixed;
