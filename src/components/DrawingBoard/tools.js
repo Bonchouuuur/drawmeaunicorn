@@ -33,7 +33,10 @@ export default [
     enable: true,
     order: 4,
     onClick: function({ canvas, ctx }) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.closePath();
     },
   },
   {
