@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import tools from './tools';
 import BoardToolbar from './BoardToolbar';
 import Board from './Board';
@@ -13,19 +14,18 @@ class BoardScreen extends Component {
       tool: tools[0],
     };
     this.initBoard = this._initBoard.bind(this);
-    this.changeSelectedTool = this._changeSelectedTool.bind(this);
+    this.handleSwitchSelectedTool = this._handleSwitchSelectedTool.bind(this);
   }
 
   _initBoard({ canvas, ctx }) {
     this.setState({ canvas, ctx });
   }
 
-  _changeSelectedTool(newTool) {
+  _handleSwitchSelectedTool(newTool) {
     this.setState({ tool: newTool });
   }
 
   render() {
-    // const { toggleScreen } = this.props; // Use to close screen (when saving or user's action)
     const { canvas, ctx, tool } = this.state;
     return (
       <BoardScreenStyled>
@@ -33,7 +33,7 @@ class BoardScreen extends Component {
           ctx={ctx}
           canvas={canvas}
           selectedTool={tool}
-          changeSelectedTool={this.changeSelectedTool}
+          switchSelectedTool={this.handleSwitchSelectedTool}
         />
         <Board
           ctx={ctx}
@@ -62,13 +62,14 @@ const BoardScreenStyled = styled.div`
   overflow: hidden;
   user-select: none;
   flex-direction: column;
-  /* padding-top: 10px; */
 `;
 
-// const BoardContainer = styled.div`
-//   height: calc(100vmin - 40px);
-//   width: calc(100vmin - 40px);
-//   display: flex;
-// `;
+BoardScreen.propTypes = {
+  onSave: PropTypes.func, // Used when saving canvas modifications
+};
+
+BoardScreen.defaultProps = {
+  onSave: null,
+};
 
 export default BoardScreen;

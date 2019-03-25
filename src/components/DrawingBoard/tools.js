@@ -5,6 +5,8 @@ export default [
     type: 'DRAW',
     enable: true,
     order: 1,
+    // onClick: function({canvas, ctx}) {
+    // }
   },
   {
     label: 'Gomme',
@@ -19,6 +21,23 @@ export default [
     type: 'MANIPULATE',
     enable: true,
     order: 3,
+  },
+  {
+    label: 'Vider',
+    key: 'BOARD_CLEAR',
+    type: 'BOARD_ACTION',
+    enable: true,
+    order: 4,
+    onClick: function({ canvas, ctx }) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    },
+  },
+  {
+    label: 'Export',
+    key: 'BOARD_EXPORT',
+    type: 'ACTION',
+    enable: true,
+    order: 5,
   },
   // {
   //   label: 'Ligne',
