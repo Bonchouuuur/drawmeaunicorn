@@ -1,6 +1,6 @@
 {
   "name": "drawmeaunicorn",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Simple drawer that allows you to draw a unicorn at anytime everywhere",
   "author": "Bonchouuur",
   "license": "MIT",
@@ -31,7 +31,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "classnames": "^2.2.6",
-    "fs": "^0.0.1-security",
     "lodash.throttle": "^4.1.1",
     "react-color": "^2.17.0",
     "react-cursor-position": "^3.0.3",

@@ -26,6 +26,8 @@ export default {
   ],
   plugins: [
     external(),
+    resolve(),
+    commonjs(),
     postcss({
       modules: true
     }),
@@ -34,8 +36,6 @@ export default {
     babel({
       exclude: 'node_modules/**',
       plugins: ['external-helpers']
-    }),
-    resolve(),
-    commonjs()
+    })
   ]
 };
