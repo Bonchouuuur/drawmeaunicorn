@@ -1,8 +1,33 @@
 /* add css styles here (optional) */
 
-.test {
-  display: inline-block;
-  margin: 2em auto;
-  border: 2px solid #000;
-  font-size: 2em;
+.top-bordered {
+  border-top: 1px solid #dbdbdb;
+}
+
+.left-bordered {
+  border-left: 1px solid #dbdbdb;
+}
+
+.right-bordered {
+  border-right: 1px solid #dbdbdb;
+}
+
+.bottom-bordered {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.Popover {
+  z-index: 99999;
+}
+
+.Popover-body {
+  background-color: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  /* padding: 10px; */
+  /* min-width: 100px; */
+}
+
+.Popover-tipShape {
+  fill: #dbdbdb;
 }

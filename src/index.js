@@ -1,22 +1,20 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
+import BoardScreen from './components/DrawingBoard/BoardScreen';
+import BoardProvider from './components/DrawingBoard/BoardProvider';
 
-import styles from './styles.css'
+const DrawMeAUnicorn = ({ onSave }) => (
+  <BoardProvider>
+    <BoardScreen onSave={onSave} />
+  </BoardProvider>
+);
 
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
+DrawMeAUnicorn.propTypes = {
+  onSave: PropTypes.func
+};
 
-  render() {
-    const {
-      text
-    } = this.props
+DrawMeAUnicorn.defaultProps = {
+  onSave: () => {}
+};
 
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+export default DrawMeAUnicorn;
