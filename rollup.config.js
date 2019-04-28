@@ -10,7 +10,7 @@ import pkg from './package.json';
 
 export default {
   input: 'src/index.js',
-  external: ['styled-components', 'fs', 'util', 'tty', 'net'],
+  external: ['styled-components'],
   globals: { 'styled-components': 'styled' },
   output: [
     {
@@ -35,7 +35,9 @@ export default {
       exclude: 'node_modules/**',
       plugins: ['external-helpers']
     }),
-    resolve(),
+    resolve({
+      browser: true
+    }),
     commonjs()
   ]
 };
