@@ -2,8 +2,6 @@
 
 > Simple drawer that allows you to draw a unicorn at anytime everywhere
 
-[![NPM](https://img.shields.io/npm/v/drawmeaunicorn.svg)](https://www.npmjs.com/package/drawmeaunicorn) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
 ## Install
 
 ```bash
@@ -13,15 +11,18 @@ npm install --save drawmeaunicorn
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import DrawMeAUnicorn from 'drawmeaunicorn';
 
-import MyComponent from 'drawmeaunicorn'
-
-class Example extends Component {
-  render () {
+class MyComponent extends Component {
+  render() {
     return (
-      <MyComponent />
-    )
+      <DrawMeAUnicorn
+        onSave={imgAsb64 => {
+          console.log(imgAsb64);
+        }}
+      />
+    );
   }
 }
 ```

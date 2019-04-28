@@ -1,13 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import ExampleComponent from "drawmeaunicorn";
+import DrawMeAUnicorn from 'drawmeaunicorn';
 
 export default class App extends Component {
   render() {
     return (
-      <div>
-        <ExampleComponent onSave={() => console.log("BOUM")} />
-      </div>
+      <DrawMeAUnicorn
+        onSave={imgAsb64 => {
+          console.log(imgAsb64);
+        }}
+      />
     );
   }
 }
