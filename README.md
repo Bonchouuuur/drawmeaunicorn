@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install --save drawmeaunicorn
+npm install --save https://github.com/Bonchouuur/drawmeaunicorn.git
 ```
 
 ## Usage
