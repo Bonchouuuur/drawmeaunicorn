@@ -9,11 +9,15 @@ export default class BoardProvider extends Component {
   constructor(props, context) {
     super(props, context);
     this.changeColor = this._changeColor.bind(this);
+    this.cleanGrid = this._cleanGrid.bind(this);
+    this.drawGrid = this._drawGrid.bind(this);
     this.handleClear = this._handleClear.bind(this);
     this.handleImgOnLoad = this._handleImgOnLoad.bind(this);
     this.handleRedo = this._handleRedo.bind(this);
     this.handleUndo = this._handleUndo.bind(this);
     this.initBoard = this._initBoard.bind(this);
+    this.initFinal = this._initFinal.bind(this);
+    this.initGrid = this._initGrid.bind(this);
     this.switchSelectedTool = this._switchSelectedTool.bind(this);
     this.updateBoard = this._updateBoard.bind(this);
     this.updateBrushOptions = this._updateBrushOptions.bind(this);
@@ -27,7 +31,11 @@ export default class BoardProvider extends Component {
       style: 'SOLID'
     },
     canvas: null,
+    gridCanvas: null,
+    finalCanvas: null,
     ctx: null,
+    gridCtx: null,
+    finalCtx: null,
     gridOptions: {
       display: true,
       size: 100
@@ -39,8 +47,26 @@ export default class BoardProvider extends Component {
     undoList: []
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      (prevState.gridCtx === null && this.state.gridCtx) ||
+      prevState.gridOptions.size !== this.state.gridOptions.size ||
+      prevState.gridOptions.display !== this.state.gridOptions.display
+    ) {
+      this.drawGrid();
+    }
+  }
+
   _initBoard({ canvas, ctx }) {
     this.setState({ canvas, ctx });
+  }
+
+  _initGrid({ gridCanvas, gridCtx }) {
+    this.setState({ gridCanvas, gridCtx });
+  }
+
+  _initFinal({ finalCanvas, finalCtx }) {
+    this.setState({ finalCanvas, finalCtx });
   }
 
   _updateBoard({ redoList, undoList, redrawedImg }) {
@@ -125,6 +151,38 @@ export default class BoardProvider extends Component {
     );
   }
 
+  _drawGrid() {
+    const { gridOptions, gridCtx, gridCanvas } = this.state;
+    this.cleanGrid();
+    if (gridOptions && gridOptions.display) {
+      gridCtx.beginPath();
+      gridCtx.strokeStyle = 'rgba(0,0,0,0.07)';
+      gridCtx.lineWidth = 1;
+      let lastVertical = 0;
+      let lastHorizontal = 0;
+      while (lastVertical + gridOptions.size < gridCanvas.width) {
+        lastVertical = lastVertical + gridOptions.size;
+        gridCtx.moveTo(lastVertical, 0);
+        gridCtx.lineTo(lastVertical, gridCanvas.height);
+      }
+      while (lastHorizontal + gridOptions.size < gridCanvas.height) {
+        lastHorizontal = lastHorizontal + gridOptions.size;
+        gridCtx.moveTo(0, lastHorizontal);
+        gridCtx.lineTo(gridCanvas.width, lastHorizontal);
+      }
+      gridCtx.stroke();
+    }
+  }
+
+  _cleanGrid() {
+    const { gridCtx, gridCanvas } = this.state;
+    gridCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+    gridCtx.beginPath();
+    gridCtx.fillStyle = 'transparent';
+    gridCtx.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
+    gridCtx.closePath();
+  }
+
   render() {
     const { redrawedImg } = this.state;
     return (
@@ -136,6 +194,8 @@ export default class BoardProvider extends Component {
           handleRedo: this.handleRedo,
           handleUndo: this.handleUndo,
           initBoard: this.initBoard,
+          initFinal: this.initFinal,
+          initGrid: this.initGrid,
           switchSelectedTool: this.switchSelectedTool,
           updateBoard: this.updateBoard,
           updateBrushOptions: this.updateBrushOptions,

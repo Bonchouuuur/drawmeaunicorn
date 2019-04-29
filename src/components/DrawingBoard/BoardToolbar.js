@@ -16,10 +16,35 @@ class BoardToolbar extends Component {
       showPicture: false
     };
     this.handleExport = this._handleExport.bind(this);
+    this.handleSave = this._handleSave.bind(this);
   }
 
   _handleExport() {
     this.setState({ showPicture: true });
+  }
+
+  _handleSave() {
+    const {
+      canvas,
+      gridOptions,
+      onSave,
+      finalCanvas,
+      gridCanvas,
+      finalCtx
+    } = this.props;
+    finalCtx.beginPath();
+    finalCtx.fillStyle = 'white';
+    finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+    finalCtx.drawImage(canvas, 0, 0);
+    finalCtx.drawImage(gridCanvas, 0, 0);
+    finalCtx.closePath();
+    onSave &&
+      onSave({
+        img: canvas.toDataURL(),
+        imgWGrid: gridOptions.display
+          ? finalCanvas.toDataURL()
+          : canvas.toDataURL()
+      });
   }
 
   render() {
@@ -59,9 +84,12 @@ class BoardToolbar extends Component {
                         tool.enable &&
                           tool.type !== 'ACTION' &&
                           switchSelectedTool(tool);
+                        // tool.enable &&
+                        //   tool.key === 'BOARD_EXPORT' &&
+                        //   this.handleExport();
                         tool.enable &&
-                          tool.key === 'BOARD_EXPORT' &&
-                          this.handleExport();
+                          tool.key === 'BOARD_SAVE' &&
+                          this.handleSave();
                         tool.key === 'BOARD_UNDO' &&
                           tool.enable &&
                           handleUndo &&
@@ -156,9 +184,14 @@ const BoardToolbarWrapper = styled.div`
 BoardToolbar.propTypes = {
   canvas: PropTypes.object,
   ctx: PropTypes.object,
+  finalCanvas: PropTypes.object,
+  finalCtx: PropTypes.object,
+  gridCanvas: PropTypes.object,
+  gridOptions: PropTypes.object,
   handleClear: PropTypes.func,
   handleRedo: PropTypes.func,
   handleUndo: PropTypes.func,
+  onSave: PropTypes.func,
   redoList: PropTypes.array,
   selectedTool: PropTypes.object,
   style: PropTypes.object,
