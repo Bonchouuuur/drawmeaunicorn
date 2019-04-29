@@ -6,13 +6,16 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Export current image as object including w/ & w/o grid preview
+
 ### Changed
 
 ### Fixed
 
+- Remove grid is now effective
+
 ### Removed
 
-
-## [0.1.0] - 2019-28-04
+## [1.0.0] - 2019-29-04
 
 - Init the project

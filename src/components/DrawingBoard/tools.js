@@ -5,23 +5,17 @@ import GridPopover from './Popovers/GridPopover';
 
 const tools = [
   {
-    label: 'Export',
-    groupKey: 'GP_EXPORT',
-    tools: [
-      {
-        enable: true,
-        icon: 'share-square',
-        key: 'BOARD_EXPORT',
-        label: 'Export',
-        order: 7,
-        type: 'ACTION'
-      }
-    ]
-  },
-  {
     label: 'Actions',
     groupKey: 'GP_ACTIONS',
     tools: [
+      {
+        enable: true,
+        icon: 'save',
+        key: 'BOARD_SAVE',
+        label: 'Save',
+        order: 0,
+        type: 'ACTION'
+      },
       {
         enable: true,
         icon: 'undo',

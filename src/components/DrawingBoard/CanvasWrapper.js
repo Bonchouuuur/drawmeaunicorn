@@ -8,6 +8,9 @@ class CanvasWrapper extends Component {
   constructor(props, context) {
     super(props, context);
     this.getScaledPosition = this._getScaledPosition.bind(this);
+    this.initBoard = this._initBoard.bind(this);
+    this.initFinal = this._initFinal.bind(this);
+    this.initGrid = this._initGrid.bind(this);
     this.onMouseDown = this._onMouseDown.bind(this);
     this.onMouseMove = this._onMouseMove.bind(this);
     this.onMouseOut = this._onMouseOut.bind(this);
@@ -17,12 +20,21 @@ class CanvasWrapper extends Component {
     this.onTouchStart = this._onTouchStart.bind(this);
     this.onWheel = this._onWheel.bind(this);
     this.canvas = React.createRef();
+    this.gridCanvas = React.createRef();
+    this.finalCanvas = React.createRef();
   }
 
   componentDidMount() {
+    this.initBoard();
+    this.initGrid();
+    this.initFinal();
+  }
+
+  _initBoard() {
+    const { initBoard } = this.props;
     const canvas = this.canvas.current;
     const ctx = this.canvas.current.getContext('2d');
-    this.props.initBoard({
+    initBoard({
       canvas,
       ctx
     });
@@ -30,6 +42,30 @@ class CanvasWrapper extends Component {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.closePath();
+  }
+
+  _initGrid() {
+    const { initGrid } = this.props;
+    const gridCanvas = this.gridCanvas.current;
+    const gridCtx = this.gridCanvas.current.getContext('2d');
+    initGrid({
+      gridCanvas,
+      gridCtx
+    });
+  }
+
+  _initFinal() {
+    const { initFinal } = this.props;
+    const finalCanvas = this.finalCanvas.current;
+    const finalCtx = this.finalCanvas.current.getContext('2d');
+    initFinal({
+      finalCanvas,
+      finalCtx
+    });
+    finalCtx.beginPath();
+    finalCtx.fillStyle = 'white';
+    finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+    finalCtx.closePath();
   }
 
   _onMouseDown(e) {
@@ -89,7 +125,24 @@ class CanvasWrapper extends Component {
         onWheel={this.onWheel}
         style={{ position: 'relative' }}
       >
-        <canvas ref={this.canvas} width={canvasDim} height={canvasDim} />
+        <canvas
+          height={canvasDim}
+          style={{ display: 'none' }}
+          ref={this.canvas}
+          width={canvasDim}
+        />
+        <canvas
+          height={canvasDim}
+          ref={this.gridCanvas}
+          // style={{ display: 'none' }}
+          width={canvasDim}
+        />
+        <canvas
+          height={canvasDim}
+          ref={this.finalCanvas}
+          style={{ display: 'none' }}
+          width={canvasDim}
+        />
         <GridPower gridOptions={gridOptions} />
       </div>
     );
@@ -106,10 +159,10 @@ const GridPower = styled.div`
     gridOptions.display &&
     `
     background:
-        linear-gradient(-90deg, rgba(0, 0, 0, .03) 1px, transparent 1px),
-        linear-gradient(rgba(0, 0, 0, .03) 1px, transparent 1px),
-        linear-gradient(-90deg, rgba(0, 0, 0, .03) 1px, transparent 1px),
-        linear-gradient(rgba(0, 0, 0, .03) 1px, transparent 1px),
+        linear-gradient(-90deg, rgba(0, 0, 0, .07) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, .07) 1px, transparent 1px),
+        linear-gradient(-90deg, rgba(0, 0, 0, .07) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, .07) 1px, transparent 1px),
         linear-gradient(transparent 3px, transparent 3px, transparent 78px, transparent 78px),
         linear-gradient(-90deg, transparent 1px, transparent 1px),
         linear-gradient(-90deg, transparent 3px, transparent 3px, transparent 78px, transparent 78px),
@@ -130,6 +183,8 @@ CanvasWrapper.propTypes = {
   canvasDim: PropTypes.number,
   gridOptions: PropTypes.object,
   initBoard: PropTypes.func,
+  initFinal: PropTypes.func,
+  initGrid: PropTypes.func,
   onMouseDown: PropTypes.func,
   onMouseMove: PropTypes.func,
   onMouseOut: PropTypes.func,

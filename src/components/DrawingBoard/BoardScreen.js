@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-// import PropTypes from 'prop-types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faEraser,
@@ -8,6 +8,7 @@ import {
   faPencilAlt,
   faPencilRuler,
   faRedo,
+  faSave,
   faShareSquare,
   faTh,
   faTrashAlt,
@@ -24,15 +25,16 @@ library.add(
   faPencilAlt,
   faPencilRuler,
   faRedo,
+  faSave,
   faShareSquare,
   faTh,
   faTrashAlt,
   faUndo
 );
 
-const BoardScreen = () => (
+const BoardScreen = ({ onSave }) => (
   <BoardScreenStyled>
-    <BoardToolbar />
+    <BoardToolbar onSave={onSave} />
     <Board />
   </BoardScreenStyled>
 );
@@ -55,12 +57,8 @@ const BoardScreenStyled = styled.div`
   z-index: 10;
 `;
 
-// BoardScreen.propTypes = {
-//   onSave: PropTypes.func // Used when saving canvas modifications
-// };
-
-// BoardScreen.defaultProps = {
-//   onSave: () => {}{onSave}
-// };
+BoardScreen.propTypes = {
+  onSave: PropTypes.func
+};
 
 export default withBoard(BoardScreen);

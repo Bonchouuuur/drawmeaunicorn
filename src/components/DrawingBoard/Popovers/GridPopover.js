@@ -25,7 +25,7 @@ const GridPopover = ({ gridOptions, updateGridOptions, toggleContent }) => {
     <GridPopoverContainer>
       <p
         className={gridOptions.display ? 'default-option' : 'current-selection'}
-        onClick={() => handleHide}
+        onClick={() => handleHide()}
       >
         Masquer
       </p>
