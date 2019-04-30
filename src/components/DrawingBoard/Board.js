@@ -7,17 +7,16 @@ import CanvasWrapper from './CanvasWrapper';
 import PinchableView from '../PinchableView/PinchableView';
 import { withBoard } from './BoardProvider';
 
-const SCALES = {
-  min: 1,
-  max: 4
-};
-
 class Board extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      canvasDim: null,
-      pinchObj: { scale: SCALES.min, x: 0, y: 0 }
+      canvasDim: 700,
+      pinchObj: { scale: null, x: 0, y: 0 },
+      scales: {
+        min: null,
+        max: 4
+      }
     };
     this.handleDraw = this._handleDraw.bind(this);
     this.handleEndDraw = this._handleEndDraw.bind(this);
@@ -35,34 +34,28 @@ class Board extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.updateDimensions);
-    this.updateDimensions();
+    setTimeout(() => {
+      this.updateDimensions();
+    }, 500);
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
   }
 
   _updateDimensions() {
-    const container = this.maincontainer.current.getBoundingClientRect();
-    const { canvasDim } = this.state;
+    const ratio =
+      Math.min(
+        this.maincontainer.current.getBoundingClientRect().width,
+        this.maincontainer.current.getBoundingClientRect().height
+      ) / 700;
+    const minScale = Math.min(1, Math.floor(ratio / 0.25) * 0.25);
     this.setState({
-      canvasDim: Math.min(container.width - 30, container.height - 30)
+      scales: {
+        min: minScale,
+        max: 4
+      },
+      pinchObj: { scale: minScale, x: 0, y: 0 }
     });
-    const { ctx, canvas, updateBoard } = this.props;
-    if (
-      ctx &&
-      canvas &&
-      Math.min(container.width - 30, container.height - 30) !== canvasDim
-    ) {
-      updateBoard({
-        undoList: [],
-        redoList: [],
-        redrawedImg: canvas.toDataURL()
-      });
-      ctx.beginPath();
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.closePath();
-    }
   }
 
   _handleStart(e, point) {
@@ -116,13 +109,19 @@ class Board extends Component {
       if (e.nativeEvent.deltaY > 0) {
         this.setState({
           pinchObj: Object.assign({}, this.state.pinchObj, {
-            scale: Math.max(SCALES.min, this.state.pinchObj.scale - 0.25)
+            scale: Math.max(
+              this.state.scales.min,
+              this.state.pinchObj.scale - 0.25
+            )
           })
         });
       } else {
         this.setState({
           pinchObj: Object.assign({}, this.state.pinchObj, {
-            scale: Math.min(SCALES.max, this.state.pinchObj.scale + 0.25)
+            scale: Math.min(
+              this.state.scales.max,
+              this.state.pinchObj.scale + 0.25
+            )
           })
         });
       }
@@ -130,19 +129,20 @@ class Board extends Component {
   }
 
   render() {
-    const { canvasDim } = this.state;
+    const { canvasDim, scales } = this.state;
     const { selectedTool } = this.props;
     return (
       <BoardWrapper ref={this.maincontainer}>
-        <PinchableView
-          backgroundColor='#ddd'
-          containerRatio={100}
-          enableManipulation={selectedTool.type === 'MANIPULATE'}
-          initialScale={this.state.pinchObj.scale}
-          maxScale={SCALES.max}
-          onPinchStop={this.handlePinchStop}
-        >
-          {canvasDim && (
+        {scales.min ? (
+          <PinchableView
+            backgroundColor='#ddd'
+            containerRatio={100}
+            enableManipulation={selectedTool.type === 'MANIPULATE'}
+            initialScale={this.state.pinchObj.scale}
+            maxScale={this.state.scales.max}
+            minScale={this.state.scales.min}
+            onPinchStop={this.handlePinchStop}
+          >
             <ReactCursorPosition
               activationInteractionTouch={INTERACTIONS.TOUCH}
             >
@@ -159,8 +159,23 @@ class Board extends Component {
                 scaleObject={this.state.pinchObj}
               />
             </ReactCursorPosition>
-          )}
-        </PinchableView>
+          </PinchableView>
+        ) : (
+          <ReactCursorPosition activationInteractionTouch={INTERACTIONS.TOUCH}>
+            <CanvasWrapper
+              canvasDim={canvasDim}
+              onMouseDown={this.handleStart}
+              onMouseMove={this.handleDraw}
+              onMouseOut={this.handleEndDraw}
+              onMouseUp={this.handleEndDraw}
+              onTouchEnd={this.handleEndDraw}
+              onTouchMove={this.handleDraw}
+              onTouchStart={this.handleStart}
+              onWheel={this.handleScroll}
+              scaleObject={this.state.pinchObj}
+            />
+          </ReactCursorPosition>
+        )}
       </BoardWrapper>
     );
   }
