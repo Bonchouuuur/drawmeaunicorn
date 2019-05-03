@@ -7,12 +7,14 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Export current image as object including w/ & w/o grid preview
+- Paper can be unzoomed at more than a 1 scale
 
 ### Changed
 
 ### Fixed
 
 - Remove grid is now effective
+- No more paper refresh when resizing window
 
 ### Removed
 
