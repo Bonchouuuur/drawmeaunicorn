@@ -142,7 +142,7 @@ class PinchableZoomPan extends Component {
               const { scale, x, y } = this.state.obj;
               const { maxScale } = this.props;
               const movePoint = normalizeTouch(mm);
-
+              console.log(' SALUT JE SUIS LE MAX ', maxScale);
               if (hasTwoTouchPoints(mm)) {
                 const scaleFactor =
                   isTouch() && mm.scale
@@ -167,6 +167,7 @@ class PinchableZoomPan extends Component {
                   y: nextScale < 1.01 ? 0 : y
                 };
               } else {
+                console.log(' COUCOU JE SUIS PAR ICI JE SAIS PAS POURQUOI ');
                 return {
                   x: movePoint.x - startPoint.x + startX,
                   y: movePoint.y - startPoint.y + startY
