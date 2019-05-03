@@ -30,14 +30,6 @@ function hasTwoTouchPoints(event) {
   }
 }
 
-// function isZoomed(scale) {
-//   return scale > 1;
-// }
-
-// function between(min, max, val) {
-//   return Math.min(max, Math.max(min, val));
-// }
-
 function normalizeTouch(e) {
   const p = isTouch() ? e.touches[0] : e;
   return {
@@ -142,7 +134,6 @@ class PinchableZoomPan extends Component {
               const { scale, x, y } = this.state.obj;
               const { maxScale } = this.props;
               const movePoint = normalizeTouch(mm);
-              console.log(' SALUT JE SUIS LE MAX ', maxScale);
               if (hasTwoTouchPoints(mm)) {
                 const scaleFactor =
                   isTouch() && mm.scale
@@ -157,17 +148,12 @@ class PinchableZoomPan extends Component {
                         translatePos(startPoint, size).x) /
                         size.width;
                 const nextScale = Math.min(maxScale, scaleFactor);
-                console.log(' NEXT SCALE : ', {
-                  maxScale,
-                  scaleFactor
-                });
                 return {
                   scale: nextScale,
                   x: nextScale < 1.01 ? 0 : x,
                   y: nextScale < 1.01 ? 0 : y
                 };
               } else {
-                console.log(' COUCOU JE SUIS PAR ICI JE SAIS PAS POURQUOI ');
                 return {
                   x: movePoint.x - startPoint.x + startX,
                   y: movePoint.y - startPoint.y + startY
