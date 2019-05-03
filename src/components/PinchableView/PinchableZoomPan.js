@@ -157,6 +157,10 @@ class PinchableZoomPan extends Component {
                         translatePos(startPoint, size).x) /
                         size.width;
                 const nextScale = between(1, maxScale, scaleFactor);
+                console.log(' NEXT SCALE : ', {
+                  maxScale,
+                  scaleFactor
+                });
                 return {
                   scale: nextScale,
                   x: nextScale < 1.01 ? 0 : x,
