@@ -4,17 +4,24 @@ import styled from 'styled-components';
 import ModalFooter from './ModalFooter';
 import ModalHeader from './ModalHeader';
 
-const Modal = ({ children, onClose, title }) => {
+const Modal = ({ children, onClose, title, closeLabel, width }) => {
   return (
-    <ModalStyled>
-      <ModalContainer>
+    <ModalStyled onClick={onClose}>
+      <ModalContainer
+        style={width && { width: width }}
+        onClick={e => e.stopPropagation()}
+      >
         <ModalHeader
           className='bottom-bordered'
           onClose={onClose}
           title={title || 'Modal'}
         />
         <div>{children}</div>
-        <ModalFooter onClose={onClose} className='top-bordered' />
+        <ModalFooter
+          onClose={onClose}
+          className='top-bordered'
+          closeLabel={closeLabel}
+        />
       </ModalContainer>
     </ModalStyled>
   );
@@ -43,7 +50,9 @@ const ModalContainer = styled.div`
 Modal.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func,
-  title: PropTypes.string
+  title: PropTypes.string,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  closeLabel: PropTypes.string
 };
 
 export default Modal;

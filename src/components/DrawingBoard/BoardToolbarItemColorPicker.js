@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { SketchPicker } from 'react-color';
 
 import { withBoard } from './BoardProvider';
+import Modal from '../Modal/Modal';
 
 class BoardToolbarItemColorPicker extends Component {
   constructor(props, context) {
@@ -35,16 +36,27 @@ class BoardToolbarItemColorPicker extends Component {
           <ColorPicker color={selectedColor} />
         </div>
         {this.state.showColorPicker && (
-          <div>
-            <PickerWrapper>
+          <Modal
+            onClose={() => this.setState({ showColorPicker: false })}
+            title='Couleur du trait'
+            closeLabel='Enregistrer'
+            width={300}
+          >
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                padding: 10
+              }}
+            >
               <SketchPicker
                 color={selectedColor}
                 onChange={this.handleChange}
                 disableAlpha
               />
-            </PickerWrapper>
-            <PickerContainer onClick={this.toggleColorPicker} />
-          </div>
+            </div>
+          </Modal>
         )}
       </BoardToolbarItemWrapper>
     );
@@ -64,20 +76,6 @@ const ColorPicker = styled.div`
   border-radius: 5px;
   height: 20px;
   width: 30px;
-`;
-
-const PickerWrapper = styled.div`
-  position: absolute;
-  z-index: 999;
-`;
-
-const PickerContainer = styled.div`
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 998;
 `;
 
 BoardToolbarItemColorPicker.propTypes = {
