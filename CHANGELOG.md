@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Color picker is now a modal to be more friendly
+- AppBar menu is horizontalscrollable
+
 ### Fixed
 
 - Remove grid is now effective
