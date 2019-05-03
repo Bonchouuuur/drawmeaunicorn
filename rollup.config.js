@@ -8,20 +8,23 @@ import svgr from '@svgr/rollup';
 
 import pkg from './package.json';
 
+const globals = { 'styled-components': 'styled' };
+
 export default {
   input: 'src/index.js',
   external: ['styled-components'],
-  globals: { 'styled-components': 'styled' },
   output: [
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true
+      sourcemap: true,
+      globals
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true
+      sourcemap: true,
+      globals
     }
   ],
   plugins: [
