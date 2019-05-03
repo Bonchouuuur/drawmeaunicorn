@@ -60,95 +60,112 @@ class BoardToolbar extends Component {
     } = this.props;
     const { showPicture } = this.state;
     return (
-      <BoardToolbarWrapper style={style}>
-        {tools.map(toolGroup => {
-          return (
-            <div
-              key={`toolgroup-${toolGroup.groupKey}`}
-              className='group-container'
-            >
-              <div>
-                {toolGroup.tools.map(tool => {
-                  let ToolBarItemComponent = BoardToolbarItem;
-                  if (tool.key === 'BOARD_COLOR_PICKER') {
-                    ToolBarItemComponent = BoardToolbarItemColorPicker;
-                  } else if (tool.menuType === 'POPOVER') {
-                    ToolBarItemComponent = BoardToolbarItemPopover;
-                  }
-                  return (
-                    <ToolBarItemComponent
-                      tool={tool}
-                      key={`tool-${tool.key}`}
-                      onClick={() => {
-                        tool.onClick && tool.onClick({ canvas, ctx });
-                        tool.enable &&
-                          tool.type !== 'ACTION' &&
-                          switchSelectedTool(tool);
-                        // tool.enable &&
-                        //   tool.key === 'BOARD_EXPORT' &&
-                        //   this.handleExport();
-                        tool.enable &&
-                          tool.key === 'BOARD_SAVE' &&
-                          this.handleSave();
-                        tool.key === 'BOARD_UNDO' &&
+      <MainWrapper>
+        <BoardToolbarWrapper style={style}>
+          {tools.map(toolGroup => {
+            return (
+              <div
+                key={`toolgroup-${toolGroup.groupKey}`}
+                className='group-container'
+              >
+                <div>
+                  {toolGroup.tools.map(tool => {
+                    let ToolBarItemComponent = BoardToolbarItem;
+                    if (tool.key === 'BOARD_COLOR_PICKER') {
+                      ToolBarItemComponent = BoardToolbarItemColorPicker;
+                    } else if (tool.menuType === 'POPOVER') {
+                      ToolBarItemComponent = BoardToolbarItemPopover;
+                    }
+                    return (
+                      <ToolBarItemComponent
+                        tool={tool}
+                        key={`tool-${tool.key}`}
+                        onClick={() => {
+                          tool.onClick && tool.onClick({ canvas, ctx });
                           tool.enable &&
-                          handleUndo &&
-                          handleUndo();
-                        tool.key === 'BOARD_REDO' &&
+                            tool.type !== 'ACTION' &&
+                            switchSelectedTool(tool);
+                          // tool.enable &&
+                          //   tool.key === 'BOARD_EXPORT' &&
+                          //   this.handleExport();
                           tool.enable &&
-                          handleRedo &&
-                          handleRedo();
-                        tool.key === 'BOARD_CLEAR' &&
+                            tool.key === 'BOARD_SAVE' &&
+                            this.handleSave();
+                          tool.key === 'BOARD_UNDO' &&
+                            tool.enable &&
+                            handleUndo &&
+                            handleUndo();
+                          tool.key === 'BOARD_REDO' &&
+                            tool.enable &&
+                            handleRedo &&
+                            handleRedo();
+                          tool.key === 'BOARD_CLEAR' &&
+                            tool.enable &&
+                            handleClear &&
+                            handleClear();
                           tool.enable &&
-                          handleClear &&
-                          handleClear();
-                        tool.enable &&
-                          tool.key === 'BOARD_TOGGLE_GRID' &&
-                          this.props.toggleGrid();
-                      }}
-                      isSelected={selectedTool.key === tool.key}
-                      isDisabled={
-                        !tool.enable ||
-                        (tool.key === 'BOARD_UNDO' &&
-                          this.props.undoList.length === 0) ||
-                        (tool.key === 'BOARD_REDO' &&
-                          this.props.redoList.length === 0)
-                      }
-                    >
-                      {tool.label}
-                    </ToolBarItemComponent>
-                  );
-                })}
+                            tool.key === 'BOARD_TOGGLE_GRID' &&
+                            this.props.toggleGrid();
+                        }}
+                        isSelected={selectedTool.key === tool.key}
+                        isDisabled={
+                          !tool.enable ||
+                          (tool.key === 'BOARD_UNDO' &&
+                            this.props.undoList.length === 0) ||
+                          (tool.key === 'BOARD_REDO' &&
+                            this.props.redoList.length === 0)
+                        }
+                      >
+                        {tool.label}
+                      </ToolBarItemComponent>
+                    );
+                  })}
+                </div>
+                <span>{toolGroup.label}</span>
               </div>
-              <span>{toolGroup.label}</span>
-            </div>
-          );
-        })}
-        {showPicture && (
-          <Modal
-            onClose={() => this.setState({ showPicture: false })}
-            title='Export du dessin'
-          >
-            <div
-              style={{
-                alignItems: 'center',
-                display: 'flex',
-                justifyContent: 'center',
-                padding: 10
-              }}
+            );
+          })}
+          {showPicture && (
+            <Modal
+              onClose={() => this.setState({ showPicture: false })}
+              title='Export du dessin'
             >
-              <img
-                alt='Draw representation'
-                src={canvas.toDataURL()}
-                width='200'
-              />
-            </div>
-          </Modal>
-        )}
-      </BoardToolbarWrapper>
+              <div
+                style={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  padding: 10
+                }}
+              >
+                <img
+                  alt='Draw representation'
+                  src={canvas.toDataURL()}
+                  width='200'
+                />
+              </div>
+            </Modal>
+          )}
+        </BoardToolbarWrapper>
+      </MainWrapper>
     );
   }
 }
+
+const MainWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  height: 110px;
+  justify-content: flex-start;
+  overflow-x: scroll;
+  background-color: #e6e6e6;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const BoardToolbarWrapper = styled.div`
   align-items: center;
@@ -156,7 +173,6 @@ const BoardToolbarWrapper = styled.div`
   display: flex;
   height: 100px;
   justify-content: center;
-  width: 100%;
   .group-container {
     display: flex;
     height: 45px;
