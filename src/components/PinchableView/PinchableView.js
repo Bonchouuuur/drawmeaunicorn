@@ -12,6 +12,7 @@ const PinchableView = ({
   holderClassName,
   initialScale,
   maxScale,
+  minScale,
   onPinchStart,
   onPinchStop
 }) => (
@@ -19,6 +20,7 @@ const PinchableView = ({
     enableManipulation={enableManipulation}
     initialScale={initialScale}
     maxScale={maxScale}
+    minScale={minScale}
     onPinchStart={onPinchStart}
     onPinchStop={onPinchStop}
     render={obj => {
@@ -26,7 +28,9 @@ const PinchableView = ({
         <MainContainerStyled className={holderClassName}>
           <ContainerStyled className={containerClassName}>
             <SubContainerStyled>
-              <MainContentStyled obj={obj}>{children}</MainContentStyled>
+              <MainContentStyled obj={obj} minScale={minScale}>
+                {children}
+              </MainContentStyled>
             </SubContainerStyled>
           </ContainerStyled>
         </MainContainerStyled>
@@ -37,6 +41,7 @@ const PinchableView = ({
 
 const MainContainerStyled = styled.div`
   position: relative;
+  height: 100%;
 `;
 
 const ContainerStyled = styled.div`
@@ -44,6 +49,7 @@ const ContainerStyled = styled.div`
   overflow: hidden;
   padding-top: 100%;
   position: relative;
+  height: 100%;
 `;
 
 const SubContainerStyled = styled.div`
@@ -59,7 +65,18 @@ const MainContentStyled = styled.div`
   display: flex;
   justify-content: center;
   transform: scale(${props => props.obj.scale})
-    translateY(${props => props.obj.y}px) translateX(${props => props.obj.x}px);
+    translateY(
+      ${props =>
+        parseFloat(props.obj.scale) === parseFloat(props.minScale)
+          ? 0
+          : props.obj.y}px
+    )
+    translateX(
+      ${props =>
+        parseFloat(props.obj.scale) === parseFloat(props.minScale)
+          ? 0
+          : props.obj.x}px
+    );
   transition: 0.3s ease-out;
   width: 100%;
 `;
@@ -68,7 +85,8 @@ PinchableView.defaultProps = {
   containerRatio: 100,
   enableManipulation: true,
   initialScale: 1,
-  maxScale: 2
+  maxScale: 2,
+  minScale: 1
 };
 
 PinchableView.propTypes = {
@@ -78,6 +96,7 @@ PinchableView.propTypes = {
   holderClassName: PropTypes.string,
   initialScale: PropTypes.number,
   maxScale: PropTypes.number,
+  minScale: PropTypes.number,
   onPinchStart: PropTypes.func,
   onPinchStop: PropTypes.func
 };

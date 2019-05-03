@@ -30,18 +30,6 @@ function hasTwoTouchPoints(event) {
   }
 }
 
-function isZoomed(scale) {
-  return scale > 1;
-}
-
-function between(min, max, val) {
-  return Math.min(max, Math.max(min, val));
-}
-
-function inverse(val) {
-  return val * -1;
-}
-
 function normalizeTouch(e) {
   const p = isTouch() ? e.touches[0] : e;
   return {
@@ -128,7 +116,10 @@ class PinchableZoomPan extends Component {
           const { scale } = this.state.obj;
           startX = this.state.obj.x;
           startY = this.state.obj.y;
-          if (hasTwoTouchPoints(event) || isZoomed(scale)) {
+          if (
+            hasTwoTouchPoints(event) ||
+            scale > Math.min(this.props.minScale, this.props.initialScale)
+          ) {
             eventPreventDefault(event);
           }
         }
@@ -143,7 +134,6 @@ class PinchableZoomPan extends Component {
               const { scale, x, y } = this.state.obj;
               const { maxScale } = this.props;
               const movePoint = normalizeTouch(mm);
-
               if (hasTwoTouchPoints(mm)) {
                 const scaleFactor =
                   isTouch() && mm.scale
@@ -157,28 +147,16 @@ class PinchableZoomPan extends Component {
                       (translatePos(movePoint, size).x -
                         translatePos(startPoint, size).x) /
                         size.width;
-                const nextScale = between(1, maxScale, scaleFactor);
+                const nextScale = Math.min(maxScale, scaleFactor);
                 return {
                   scale: nextScale,
                   x: nextScale < 1.01 ? 0 : x,
                   y: nextScale < 1.01 ? 0 : y
                 };
               } else {
-                let scaleFactorX =
-                  (size.width * scale - size.width) / (scale * 2);
-                let scaleFactorY =
-                  (size.height * scale - size.height) / (scale * 2);
                 return {
-                  x: between(
-                    inverse(scaleFactorX),
-                    scaleFactorX,
-                    movePoint.x - startPoint.x + startX
-                  ),
-                  y: between(
-                    inverse(scaleFactorY),
-                    scaleFactorY,
-                    movePoint.y - startPoint.y + startY
-                  )
+                  x: movePoint.x - startPoint.x + startX,
+                  y: movePoint.y - startPoint.y + startY
                 };
               }
             })
@@ -243,6 +221,7 @@ class PinchableZoomPan extends Component {
         ref={root => {
           this.root = root;
         }}
+        style={{ height: '100%' }}
       >
         {this.props.render({
           x: x.toFixed(2),
@@ -257,7 +236,8 @@ class PinchableZoomPan extends Component {
 PinchableZoomPan.defaultProps = {
   enableManipulation: true,
   initialScale: 1,
-  maxScale: 2
+  maxScale: 2,
+  minScale: 1
 };
 
 PinchableZoomPan.propTypes = {
@@ -266,7 +246,8 @@ PinchableZoomPan.propTypes = {
   maxScale: PropTypes.number,
   onPinchStart: PropTypes.func,
   onPinchStop: PropTypes.func,
-  render: PropTypes.func
+  render: PropTypes.func,
+  minScale: PropTypes.number
 };
 
 export default PinchableZoomPan;

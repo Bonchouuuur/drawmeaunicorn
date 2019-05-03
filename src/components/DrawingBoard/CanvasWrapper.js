@@ -125,16 +125,11 @@ class CanvasWrapper extends Component {
         onWheel={this.onWheel}
         style={{ position: 'relative' }}
       >
-        <canvas
-          height={canvasDim}
-          style={{ display: 'none' }}
-          ref={this.canvas}
-          width={canvasDim}
-        />
+        <canvas height={canvasDim} ref={this.canvas} width={canvasDim} />
         <canvas
           height={canvasDim}
           ref={this.gridCanvas}
-          // style={{ display: 'none' }}
+          style={{ display: 'none' }}
           width={canvasDim}
         />
         <canvas
@@ -155,6 +150,7 @@ const GridPower = styled.div`
   position: absolute;
   right: 0;
   top: 0;
+  height: 700px;
   ${({ gridOptions }) =>
     gridOptions.display &&
     `

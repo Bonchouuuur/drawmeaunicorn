@@ -12,6 +12,7 @@
     // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,
     "semi": 0,
+    "indent": 0,
     "no-irregular-whitespace": 0,
     // "react/jsx-no-bind": [true, { "allowFunctions": true }],
     // allow specifying true explicitly for boolean props
