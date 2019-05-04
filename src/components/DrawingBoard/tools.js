@@ -82,8 +82,8 @@ const tools = [
         icon: 'pencil-alt',
         key: 'BOARD_PEN',
         label: 'Pen',
-        onClick: function({ canvas, ctx }) {
-          ctx.strokeStyle = 'black';
+        onClick: function({ canvas, ctx, selectedColor }) {
+          ctx.strokeStyle = selectedColor;
         },
         order: 3,
         type: 'DRAW'

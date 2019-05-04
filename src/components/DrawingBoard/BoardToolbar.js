@@ -54,6 +54,7 @@ class BoardToolbar extends Component {
       handleClear,
       handleRedo,
       handleUndo,
+      selectedColor,
       selectedTool,
       style,
       switchSelectedTool
@@ -81,7 +82,8 @@ class BoardToolbar extends Component {
                         tool={tool}
                         key={`tool-${tool.key}`}
                         onClick={() => {
-                          tool.onClick && tool.onClick({ canvas, ctx });
+                          tool.onClick &&
+                            tool.onClick({ canvas, ctx, selectedColor });
                           tool.enable &&
                             tool.type !== 'ACTION' &&
                             switchSelectedTool(tool);
@@ -209,6 +211,7 @@ BoardToolbar.propTypes = {
   handleUndo: PropTypes.func,
   onSave: PropTypes.func,
   redoList: PropTypes.array,
+  selectedColor: PropTypes.string,
   selectedTool: PropTypes.object,
   style: PropTypes.object,
   switchSelectedTool: PropTypes.func,
