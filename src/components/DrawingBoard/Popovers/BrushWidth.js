@@ -12,12 +12,6 @@ const WIDTHS = [
   { key: 'THE_LARGER', value: 20 }
 ];
 
-// const STYLES = [
-//   { key: 'SOLID', value: 'SOLID' },
-//   { key: 'DASHED', value: 'DASHED' },
-//   { key: 'DOTTED', value: 'DOTTED' },
-// ];
-
 const BrushWidth = ({ brushOptions, toggleContent, updateBrushOptions }) => {
   const handleUpdateSize = function(lineWidth) {
     updateBrushOptions({ width: lineWidth });
@@ -65,7 +59,6 @@ const BrushLevelSelector = styled.div`
   justify-content: center;
   & > div {
     background-color: black;
-    border-radius: 10px;
     margin: 16px 0;
     width: 50px;
   }
