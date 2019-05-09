@@ -181,7 +181,7 @@ const BoardToolbarWrapper = styled.div`
     position: relative;
     border-right: 1px solid #d6d6d6;
     min-height: 45px;
-    padding: 0 15px;
+    padding: 0 5px;
     & > div {
       display: flex;
     }
