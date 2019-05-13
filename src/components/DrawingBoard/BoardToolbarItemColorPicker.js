@@ -68,7 +68,7 @@ const BoardToolbarItemWrapper = styled.div`
   cursor: pointer;
   display: flex;
   justify-content: center;
-  padding: 0 10px;
+  padding: 0 20px;
 `;
 
 const ColorPicker = styled.div`

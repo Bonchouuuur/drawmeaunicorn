@@ -54,9 +54,10 @@ const BoardToolbarItemWrapper = styled.div`
   display: flex;
   font-size: 18px;
   justify-content: center;
-  padding: 0 10px;
+  padding: 0 20px;
   &.selected {
     border: 1px solid grey;
+    box-sizing: border-box;
     text-decoration: underline;
   }
   &.disabled {
