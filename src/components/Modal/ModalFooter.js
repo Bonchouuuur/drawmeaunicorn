@@ -15,6 +15,17 @@ const ModalFooterStyled = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 10px 15px;
+  button {
+    background-color: #e7e7e7;
+    border: none;
+    color: black;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+  }
 `;
 
 ModalFooter.propTypes = {
