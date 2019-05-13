@@ -20,7 +20,11 @@ class BoardToolbarItem extends Component {
         onClick={onClick}
         style={style}
       >
-        {tool.icon ? <FontAwesomeIcon icon={tool.icon} /> : children}
+        <div
+          className={classNames({ selected: isSelected, disabled: isDisabled })}
+        >
+          {tool.icon ? <FontAwesomeIcon icon={tool.icon} /> : children}
+        </div>
       </BoardToolbarItemWrapper>
     );
   }
@@ -33,10 +37,18 @@ const BoardToolbarItemWrapper = styled.div`
   display: flex;
   font-size: 18px;
   justify-content: center;
-  padding: 0 10px;
+  padding: 0 8px;
   &.selected {
-    border: 1px solid grey;
     text-decoration: underline;
+  }
+  & > div {
+    // background-color: lightgreen;
+    padding 10px 12px;
+    &.selected {
+      box-sizing: border-box;
+      border: 1px solid grey;
+      // background-color: pink;
+    }
   }
   &.disabled {
     color: lightgray;

@@ -14,23 +14,24 @@ const ModalHeader = ({ title, onClose, className }) => {
 };
 
 const ModalHeaderStyled = styled.div`
-  display: flex;
+  // display: flex;
+  position: relative;
 `;
 
 const ModalHeaderCloseWrapper = styled.div`
-  align-items: center;
-  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 35px;
   display: flex;
   justify-content: center;
-  padding: 5px 10px;
+  align-items: center;
 `;
 
 const ModalHeaderTitleWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 2;
-  justify-content: center;
-  padding: 15px 20px;
+  padding: 15px 35px;
+  text-align: center;
   & > p {
     font-size: 16px;
     line-height: 16px;
