@@ -21,6 +21,7 @@ const ModalHeaderCloseWrapper = styled.div`
   align-items: center;
   cursor: pointer;
   display: flex;
+  flex: 15px 0 0;
   justify-content: center;
   padding: 5px 10px;
 `;
@@ -30,7 +31,8 @@ const ModalHeaderTitleWrapper = styled.div`
   display: flex;
   flex: 2;
   justify-content: center;
-  padding: 15px 20px;
+  padding: 15px 35px;
+  margin-left: -35px;
   & > p {
     font-size: 16px;
     line-height: 16px;
