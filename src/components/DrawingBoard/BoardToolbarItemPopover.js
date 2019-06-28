@@ -36,10 +36,8 @@ class BoardToolbarItemPopover extends Component {
           onOuterAction={this.togglePopover}
           preferPlace='below'
         >
-          {tool.icon ? (
+          {tool.icon && (
             <FontAwesomeIcon icon={tool.icon} onClick={this.togglePopover} />
-          ) : (
-            <span>pp</span>
           )}
         </Popover>
       </BoardToolbarItemWrapper>

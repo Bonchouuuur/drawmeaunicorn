@@ -37,7 +37,7 @@ export default class BoardProvider extends Component {
     gridCtx: null,
     finalCtx: null,
     gridOptions: {
-      display: true,
+      display: false,
       size: 100
     },
     redoList: [],
