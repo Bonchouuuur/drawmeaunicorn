@@ -33,12 +33,15 @@ class Board extends Component {
   prevPos = { x: 0, y: 0 };
 
   componentDidMount() {
+    this._isMounted = true;
     window.addEventListener('resize', this.updateDimensions);
     setTimeout(() => {
       this.updateDimensions();
     }, 500);
   }
+
   componentWillUnmount() {
+    this._isMounted = false;
     window.removeEventListener('resize', this.updateDimensions);
   }
 
@@ -49,13 +52,15 @@ class Board extends Component {
         this.maincontainer.current.getBoundingClientRect().height
       ) / 700;
     const minScale = Math.min(1, Math.floor(ratio / 0.25) * 0.25);
-    this.setState({
-      scales: {
-        min: minScale,
-        max: 4
-      },
-      pinchObj: { scale: minScale, x: 0, y: 0 }
-    });
+    if (this._isMounted) {
+      this.setState({
+        scales: {
+          min: minScale,
+          max: 4
+        },
+        pinchObj: { scale: minScale, x: 0, y: 0 }
+      });
+    }
   }
 
   _handleStart(e, point) {
@@ -101,29 +106,35 @@ class Board extends Component {
   }
 
   _handlePinchStop(obj) {
-    this.setState({ pinchObj: obj });
+    if (this._isMounted) {
+      this.setState({ pinchObj: obj });
+    }
   }
 
   _handleScroll(e) {
     if (this.props.selectedTool.type === 'MANIPULATE') {
       if (e.nativeEvent.deltaY > 0) {
-        this.setState({
-          pinchObj: Object.assign({}, this.state.pinchObj, {
-            scale: Math.max(
-              this.state.scales.min,
-              this.state.pinchObj.scale - 0.25
-            )
-          })
-        });
+        if (this._isMounted) {
+          this.setState({
+            pinchObj: Object.assign({}, this.state.pinchObj, {
+              scale: Math.max(
+                this.state.scales.min,
+                this.state.pinchObj.scale - 0.25
+              )
+            })
+          });
+        }
       } else {
-        this.setState({
-          pinchObj: Object.assign({}, this.state.pinchObj, {
-            scale: Math.min(
-              this.state.scales.max,
-              this.state.pinchObj.scale + 0.25
-            )
-          })
-        });
+        if (this._isMounted) {
+          this.setState({
+            pinchObj: Object.assign({}, this.state.pinchObj, {
+              scale: Math.min(
+                this.state.scales.max,
+                this.state.pinchObj.scale + 0.25
+              )
+            })
+          });
+        }
       }
     }
   }

@@ -15,14 +15,31 @@ class BoardToolbarItemColorPicker extends Component {
     };
     this.toggleColorPicker = this._toggleColorPicker.bind(this);
     this.handleChange = this._handleChange.bind(this);
+    this.handleClose = this._handleClose.bind(this);
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   _toggleColorPicker() {
-    this.setState({ showColorPicker: !this.state.showColorPicker });
+    if (this._isMounted) {
+      this.setState({ showColorPicker: !this.state.showColorPicker });
+    }
   }
 
   _handleChange(color) {
     this.props.changeColor(color.hex);
+  }
+
+  _handleClose() {
+    if (this._isMounted) {
+      this.setState({ showColorPicker: false });
+    }
   }
 
   render() {
@@ -37,7 +54,7 @@ class BoardToolbarItemColorPicker extends Component {
         </div>
         {this.state.showColorPicker && (
           <Modal
-            onClose={() => this.setState({ showColorPicker: false })}
+            onClose={this.handleClose}
             title='Couleur du trait'
             closeLabel='Enregistrer'
             width={300}
