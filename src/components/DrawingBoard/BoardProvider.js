@@ -7,7 +7,7 @@ export const BoardContext = createContext();
 
 export default class BoardProvider extends Component {
   constructor(props, context) {
-    const { baseImg } = props;
+    const { backgroundImg } = props;
     super(props, context);
     this.changeColor = this._changeColor.bind(this);
     this.cleanGrid = this._cleanGrid.bind(this);
@@ -40,7 +40,7 @@ export default class BoardProvider extends Component {
         size: 100
       },
       redoList: [],
-      redrawedImg: baseImg || null,
+      redrawedImg: backgroundImg || null,
       selectedColor: '#000000',
       selectedTool: getDefaultTool(),
       undoList: []
@@ -256,7 +256,7 @@ export default class BoardProvider extends Component {
 }
 
 BoardProvider.propTypes = {
-  baseImg: PropTypes.string,
+  backgroundImg: PropTypes.string,
   children: PropTypes.node
 };
 
