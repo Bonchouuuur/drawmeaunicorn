@@ -27,6 +27,13 @@ class MyComponent extends Component {
 }
 ```
 
+## Props
+
+| Name          | Type            | Required (default value) | What for                                          |
+| ------------- | --------------- | ------------------------ | ------------------------------------------------- |
+| onSave        | Function        | -                        | Callback when user exports its drawing            |
+| backgroundImg | String (base64) | -                        | Image to load instead of a plain white background |
+
 ## License
 
 MIT © [Bonchouuur](https://github.com/Bonchouuur)

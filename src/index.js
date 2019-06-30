@@ -37,18 +37,20 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
-const DrawMeAUnicorn = ({ onSave }) => (
-  <BoardProvider>
+const DrawMeAUnicorn = ({ onSave, backgroundImg }) => (
+  <BoardProvider backgroundImg={backgroundImg}>
     <GlobalStyle />
     <BoardScreen onSave={onSave} />
   </BoardProvider>
 );
 
 DrawMeAUnicorn.propTypes = {
+  backgroundImg: PropTypes.string,
   onSave: PropTypes.func
 };
 
 DrawMeAUnicorn.defaultProps = {
+  backgroundImg: null,
   onSave: () => {}
 };
 

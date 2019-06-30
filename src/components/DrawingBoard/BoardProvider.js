@@ -7,6 +7,7 @@ export const BoardContext = createContext();
 
 export default class BoardProvider extends Component {
   constructor(props, context) {
+    const { backgroundImg } = props;
     super(props, context);
     this.changeColor = this._changeColor.bind(this);
     this.cleanGrid = this._cleanGrid.bind(this);
@@ -23,29 +24,28 @@ export default class BoardProvider extends Component {
     this.updateBrushOptions = this._updateBrushOptions.bind(this);
     this.updateGridOptions = this._updateGridOptions.bind(this);
     this.redrawedImg = React.createRef();
+    this.state = {
+      brushOptions: {
+        width: 1,
+        style: 'SOLID'
+      },
+      canvas: null,
+      gridCanvas: null,
+      finalCanvas: null,
+      ctx: null,
+      gridCtx: null,
+      finalCtx: null,
+      gridOptions: {
+        display: false,
+        size: 100
+      },
+      redoList: [],
+      redrawedImg: backgroundImg || null,
+      selectedColor: '#000000',
+      selectedTool: getDefaultTool(),
+      undoList: []
+    };
   }
-
-  state = {
-    brushOptions: {
-      width: 1,
-      style: 'SOLID'
-    },
-    canvas: null,
-    gridCanvas: null,
-    finalCanvas: null,
-    ctx: null,
-    gridCtx: null,
-    finalCtx: null,
-    gridOptions: {
-      display: false,
-      size: 100
-    },
-    redoList: [],
-    redrawedImg: null,
-    selectedColor: '#000000',
-    selectedTool: getDefaultTool(),
-    undoList: []
-  };
 
   componentDidMount() {
     this._isMounted = true;
@@ -67,7 +67,12 @@ export default class BoardProvider extends Component {
 
   _initBoard({ canvas, ctx }) {
     if (this._isMounted) {
-      this.setState({ canvas, ctx });
+      this.setState({ canvas, ctx }, () => {
+        const { redrawedImg } = this.state;
+        if (redrawedImg) {
+          this.handleImgOnLoad();
+        }
+      });
     }
   }
 
@@ -94,8 +99,11 @@ export default class BoardProvider extends Component {
   }
 
   _handleImgOnLoad() {
-    const img = this.redrawedImg.current;
-    this.state.ctx.drawImage(img, 0, 0);
+    const { ctx } = this.state;
+    if (ctx) {
+      const img = this.redrawedImg.current;
+      this.state.ctx.drawImage(img, 0, 0);
+    }
   }
 
   _handleUndo() {
@@ -248,6 +256,7 @@ export default class BoardProvider extends Component {
 }
 
 BoardProvider.propTypes = {
+  backgroundImg: PropTypes.string,
   children: PropTypes.node
 };
 
