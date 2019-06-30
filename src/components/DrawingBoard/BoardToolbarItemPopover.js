@@ -16,8 +16,18 @@ class BoardToolbarItemPopover extends Component {
     this.togglePopover = this._togglePopover.bind(this);
   }
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   _togglePopover() {
-    this.setState({ isOpen: !this.state.isOpen });
+    if (this._isMounted) {
+      this.setState({ isOpen: !this.state.isOpen });
+    }
   }
 
   render() {

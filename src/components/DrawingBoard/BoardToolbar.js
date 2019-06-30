@@ -17,10 +17,27 @@ class BoardToolbar extends Component {
     };
     this.handleExport = this._handleExport.bind(this);
     this.handleSave = this._handleSave.bind(this);
+    this.handleClose = this._handleClose.bind(this);
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   _handleExport() {
-    this.setState({ showPicture: true });
+    if (this._isMounted) {
+      this.setState({ showPicture: true });
+    }
+  }
+
+  _handleClose() {
+    if (this._isMounted) {
+      this.setState({ showPicture: false });
+    }
   }
 
   _handleSave() {
@@ -125,10 +142,7 @@ class BoardToolbar extends Component {
             );
           })}
           {showPicture && (
-            <Modal
-              onClose={() => this.setState({ showPicture: false })}
-              title='Export du dessin'
-            >
+            <Modal onClose={this.handleClose} title='Export du dessin'>
               <div
                 style={{
                   alignItems: 'center',

@@ -47,6 +47,14 @@ export default class BoardProvider extends Component {
     undoList: []
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       (prevState.gridCtx === null && this.state.gridCtx) ||
@@ -58,23 +66,31 @@ export default class BoardProvider extends Component {
   }
 
   _initBoard({ canvas, ctx }) {
-    this.setState({ canvas, ctx });
+    if (this._isMounted) {
+      this.setState({ canvas, ctx });
+    }
   }
 
   _initGrid({ gridCanvas, gridCtx }) {
-    this.setState({ gridCanvas, gridCtx });
+    if (this._isMounted) {
+      this.setState({ gridCanvas, gridCtx });
+    }
   }
 
   _initFinal({ finalCanvas, finalCtx }) {
-    this.setState({ finalCanvas, finalCtx });
+    if (this._isMounted) {
+      this.setState({ finalCanvas, finalCtx });
+    }
   }
 
   _updateBoard({ redoList, undoList, redrawedImg }) {
-    this.setState({
-      redoList: redoList || this.state.redoList,
-      redrawedImg: redrawedImg || this.state.redrawedImg,
-      undoList: undoList || this.state.undoList
-    });
+    if (this._isMounted) {
+      this.setState({
+        redoList: redoList || this.state.redoList,
+        redrawedImg: redrawedImg || this.state.redrawedImg,
+        undoList: undoList || this.state.undoList
+      });
+    }
   }
 
   _handleImgOnLoad() {
@@ -85,26 +101,30 @@ export default class BoardProvider extends Component {
   _handleUndo() {
     if (this.state.undoList.length > 0) {
       const state = this.state.undoList.pop();
-      this.setState({
-        redoList: [...this.state.redoList, this.state.canvas.toDataURL()],
-        redrawedImg: state,
-        undoList: this.state.undoList.filter(
-          (item, index) => index !== this.state.undoList.length
-        )
-      });
+      if (this._isMounted) {
+        this.setState({
+          redoList: [...this.state.redoList, this.state.canvas.toDataURL()],
+          redrawedImg: state,
+          undoList: this.state.undoList.filter(
+            (item, index) => index !== this.state.undoList.length
+          )
+        });
+      }
     }
   }
 
   _handleRedo() {
     if (this.state.redoList.length > 0) {
       const state = this.state.redoList.pop();
-      this.setState({
-        undoList: [...this.state.undoList, this.state.canvas.toDataURL()],
-        redrawedImg: state,
-        redoList: this.state.redoList.filter(
-          (item, index) => index !== this.state.redoList.length
-        )
-      });
+      if (this._isMounted) {
+        this.setState({
+          undoList: [...this.state.undoList, this.state.canvas.toDataURL()],
+          redrawedImg: state,
+          redoList: this.state.redoList.filter(
+            (item, index) => index !== this.state.redoList.length
+          )
+        });
+      }
     }
   }
 
@@ -115,40 +135,50 @@ export default class BoardProvider extends Component {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.closePath();
-    this.setState({
-      redrawedImg: this.state.canvas.toDataURL(),
-      redoList: [],
-      undoList: [...this.state.undoList, ctxBeforeAction]
-    });
+    if (this._isMounted) {
+      this.setState({
+        redrawedImg: this.state.canvas.toDataURL(),
+        redoList: [],
+        undoList: [...this.state.undoList, ctxBeforeAction]
+      });
+    }
   }
 
   _switchSelectedTool(newTool) {
-    this.setState({ selectedTool: newTool });
+    if (this._isMounted) {
+      this.setState({ selectedTool: newTool });
+    }
   }
 
   _changeColor(newColor) {
-    this.setState({ selectedColor: newColor });
+    if (this._isMounted) {
+      this.setState({ selectedColor: newColor });
+    }
     const { ctx } = this.state;
     ctx.strokeStyle = newColor;
   }
 
   _updateGridOptions(gridOptions) {
-    this.setState({
-      gridOptions: Object.assign({}, this.state.gridOptions, gridOptions)
-    });
+    if (this._isMounted) {
+      this.setState({
+        gridOptions: Object.assign({}, this.state.gridOptions, gridOptions)
+      });
+    }
   }
 
   _updateBrushOptions(brushOptions) {
-    this.setState(
-      {
-        brushOptions: Object.assign({}, this.state.brushOptions, brushOptions)
-      },
-      () => {
-        const { ctx, brushOptions } = this.state;
-        ctx.lineWidth = brushOptions.width;
-        ctx.setLineDash(brushOptions.style === 'DASHED' ? [5, 15] : []);
-      }
-    );
+    if (this._isMounted) {
+      this.setState(
+        {
+          brushOptions: Object.assign({}, this.state.brushOptions, brushOptions)
+        },
+        () => {
+          const { ctx, brushOptions } = this.state;
+          ctx.lineWidth = brushOptions.width;
+          ctx.setLineDash(brushOptions.style === 'DASHED' ? [5, 15] : []);
+        }
+      );
+    }
   }
 
   _drawGrid() {

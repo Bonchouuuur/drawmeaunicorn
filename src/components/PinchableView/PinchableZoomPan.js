@@ -55,33 +55,39 @@ class PinchableZoomPan extends Component {
   resize() {
     if (this.root) {
       const domNode = this.root;
-      this.setState({
-        size: {
-          width: domNode.offsetWidth,
-          height: domNode.offsetHeight
-        }
-      });
+      if (this._isMounted) {
+        this.setState({
+          size: {
+            width: domNode.offsetWidth,
+            height: domNode.offsetHeight
+          }
+        });
+      }
     }
-  }
-
-  componentWillUnmount() {
-    if (this.pinchSubscription) {
-      this.pinchSubscription = null;
-    }
-    global.removeEventListener('resize', this.resizeThrottled);
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this.handlePinch();
     this.resize();
     this.resizeThrottled = throttle(() => this.resize(), 500);
     global.addEventListener('resize', this.resizeThrottled);
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+    if (this.pinchSubscription) {
+      this.pinchSubscription = null;
+    }
+    global.removeEventListener('resize', this.resizeThrottled);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.state.obj.scale !== nextProps.initialScale) {
       const obj = { ...this.state.obj, scale: nextProps.initialScale };
-      this.setState({ obj });
+      if (this._isMounted) {
+        this.setState({ obj });
+      }
     }
   }
 
@@ -170,9 +176,11 @@ class PinchableZoomPan extends Component {
         this.refreshPinchTimeoutTimer();
       }
       global.requestAnimationFrame(() => {
-        this.setState({
-          obj: Object.assign({}, this.state.obj, newObject)
-        });
+        if (this._isMounted) {
+          this.setState({
+            obj: Object.assign({}, this.state.obj, newObject)
+          });
+        }
       });
     });
   }
@@ -189,15 +197,17 @@ class PinchableZoomPan extends Component {
 
   pinchStopped() {
     if (this.props.enableManipulation) {
-      this.setState(
-        {
-          isPinching: false
-        },
-        () => {
-          this.pinchTimeoutTimer = null;
-          this.props.onPinchStop && this.props.onPinchStop(this.state.obj);
-        }
-      );
+      if (this._isMounted) {
+        this.setState(
+          {
+            isPinching: false
+          },
+          () => {
+            this.pinchTimeoutTimer = null;
+            this.props.onPinchStop && this.props.onPinchStop(this.state.obj);
+          }
+        );
+      }
     }
   }
 
