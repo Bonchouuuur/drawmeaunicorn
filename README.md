@@ -1,6 +1,6 @@
 # drawmeaunicorn
 
-> Simple drawer that allows you to draw a unicorn at anytime everywhere
+> Simple drawer that allows you to draw a unicorn at anytime anywhere
 
 ## Install
 
