@@ -87,9 +87,6 @@ class BoardToolbar extends Component {
                           tool.enable &&
                             tool.type !== 'ACTION' &&
                             switchSelectedTool(tool);
-                          // tool.enable &&
-                          //   tool.key === 'BOARD_EXPORT' &&
-                          //   this.handleExport();
                           tool.enable &&
                             tool.key === 'BOARD_SAVE' &&
                             this.handleSave();

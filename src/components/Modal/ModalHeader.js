@@ -14,7 +14,6 @@ const ModalHeader = ({ title, onClose, className }) => {
 };
 
 const ModalHeaderStyled = styled.div`
-  // display: flex;
   position: relative;
 `;
 

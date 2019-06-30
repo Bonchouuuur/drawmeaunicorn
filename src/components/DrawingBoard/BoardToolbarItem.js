@@ -42,12 +42,10 @@ const BoardToolbarItemWrapper = styled.div`
     text-decoration: underline;
   }
   & > div {
-    // background-color: lightgreen;
     padding 10px 12px;
     &.selected {
       box-sizing: border-box;
       border: 1px solid grey;
-      // background-color: pink;
     }
   }
   &.disabled {
