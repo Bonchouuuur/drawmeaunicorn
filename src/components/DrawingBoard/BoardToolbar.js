@@ -61,7 +61,7 @@ class BoardToolbar extends Component {
     } = this.props;
     const { showPicture } = this.state;
     return (
-      <MainWrapper>
+      <MainWrapper className='DrawMeAUnicorn-ToolBar'>
         <BoardToolbarWrapper style={style}>
           {tools.map(toolGroup => {
             return (
@@ -87,9 +87,6 @@ class BoardToolbar extends Component {
                           tool.enable &&
                             tool.type !== 'ACTION' &&
                             switchSelectedTool(tool);
-                          // tool.enable &&
-                          //   tool.key === 'BOARD_EXPORT' &&
-                          //   this.handleExport();
                           tool.enable &&
                             tool.key === 'BOARD_SAVE' &&
                             this.handleSave();

@@ -132,7 +132,7 @@ class Board extends Component {
     const { canvasDim, scales } = this.state;
     const { selectedTool } = this.props;
     return (
-      <BoardWrapper ref={this.maincontainer}>
+      <BoardWrapper ref={this.maincontainer} className='DrawMeAUnicorn-Board'>
         {scales.min ? (
           <PinchableView
             backgroundColor='#ddd'
@@ -195,6 +195,7 @@ const BoardWrapper = styled.div`
 
 Board.propTypes = {
   canvas: PropTypes.object,
+  className: PropTypes.string,
   ctx: PropTypes.object,
   selectedTool: PropTypes.object,
   undoList: PropTypes.array,
