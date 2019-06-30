@@ -61,7 +61,7 @@ class BoardToolbar extends Component {
     } = this.props;
     const { showPicture } = this.state;
     return (
-      <MainWrapper>
+      <MainWrapper className='DrawMeAUnicorn-ToolBar'>
         <BoardToolbarWrapper style={style}>
           {tools.map(toolGroup => {
             return (

@@ -37,10 +37,10 @@ const GlobalStyle = createGlobalStyle`
 }
 `;
 
-const DrawMeAUnicorn = ({ onSave }) => (
+const DrawMeAUnicorn = ({ onSave, boardStyles }) => (
   <BoardProvider>
     <GlobalStyle />
-    <BoardScreen onSave={onSave} />
+    <BoardScreen onSave={onSave} boardStyles={boardStyles} />
   </BoardProvider>
 );
 

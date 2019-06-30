@@ -33,7 +33,7 @@ library.add(
 );
 
 const BoardScreen = ({ onSave }) => (
-  <BoardScreenStyled>
+  <BoardScreenStyled className='DrawMeAUnicorn-MainBoard'>
     <BoardToolbar onSave={onSave} />
     <Board />
   </BoardScreenStyled>
@@ -42,18 +42,18 @@ const BoardScreen = ({ onSave }) => (
 const BoardScreenStyled = styled.div`
   align-items: center;
   background-color: white;
-  bottom: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   justify-content: center;
+  bottom: 0;
   left: 0;
   overflow: hidden;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
+  height: 100%;
+  width: 100%;
   user-select: none;
-  width: 100vw;
   z-index: 10;
 `;
 
