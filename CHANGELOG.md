@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Don't fire handleStart anymore if canvas is not ready
+
 ### Removed
 
 ## [1.1.0] - 2019-01-07
