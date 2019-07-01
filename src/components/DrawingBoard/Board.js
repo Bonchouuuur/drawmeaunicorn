@@ -64,8 +64,9 @@ class Board extends Component {
   }
 
   _handleStart(e, point) {
-    if (this.props.selectedTool.type === 'DRAW') {
-      this.ctxBeforeAction = this.props.canvas.toDataURL();
+    const { canvas } = this.props;
+    if (this.props.selectedTool.type === 'DRAW' && canvas) {
+      this.ctxBeforeAction = canvas.toDataURL();
       this.canPaint = true;
       this.prevPos = point;
       this.hasPaint = false;
