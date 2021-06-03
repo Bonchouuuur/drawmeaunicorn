@@ -14881,10 +14881,11 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
   if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
     return false;
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(array);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
   }
   var index = -1,
       result = true,
@@ -15254,10 +15255,11 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
       return false;
     }
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(object);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
   }
   var result = true;
   stack.set(object, other);
@@ -16504,11 +16506,11 @@ var _baseKeysIn = baseKeysIn;
  * _.keysIn(new Foo);
  * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
  */
-function keysIn$1(object) {
+function keysIn(object) {
   return isArrayLike_1(object) ? _arrayLikeKeys(object, true) : _baseKeysIn(object);
 }
 
-var keysIn_1 = keysIn$1;
+var keysIn_1 = keysIn;
 
 /**
  * The base implementation of `_.assignIn` without support for multiple sources
@@ -17076,7 +17078,7 @@ function baseClone(value, bitmask, customizer, key, object, stack) {
 
   var keysFunc = isFull
     ? (isFlat ? _getAllKeysIn : _getAllKeys)
-    : (isFlat ? keysIn : keys_1);
+    : (isFlat ? keysIn_1 : keys_1);
 
   var props = isArr ? undefined : keysFunc(value);
   _arrayEach(props || value, function(subValue, key) {
@@ -20110,11 +20112,11 @@ var _baseKeysIn$1 = baseKeysIn$1;
  * _.keysIn(new Foo);
  * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
  */
-function keysIn$2(object) {
+function keysIn$1(object) {
   return isArrayLike_1$1(object) ? _arrayLikeKeys$1(object, true) : _baseKeysIn$1(object);
 }
 
-var keysIn_1$1 = keysIn$2;
+var keysIn_1$1 = keysIn$1;
 
 /**
  * Converts `value` to a plain object flattening inherited enumerable string
@@ -20693,6 +20695,44 @@ var now$1 = function() {
 
 var now_1 = now$1;
 
+/** Used to match a single whitespace character. */
+var reWhitespace = /\s/;
+
+/**
+ * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+ * character of `string`.
+ *
+ * @private
+ * @param {string} string The string to inspect.
+ * @returns {number} Returns the index of the last non-whitespace character.
+ */
+function trimmedEndIndex(string) {
+  var index = string.length;
+
+  while (index-- && reWhitespace.test(string.charAt(index))) {}
+  return index;
+}
+
+var _trimmedEndIndex = trimmedEndIndex;
+
+/** Used to match leading whitespace. */
+var reTrimStart = /^\s+/;
+
+/**
+ * The base implementation of `_.trim`.
+ *
+ * @private
+ * @param {string} string The string to trim.
+ * @returns {string} Returns the trimmed string.
+ */
+function baseTrim(string) {
+  return string
+    ? string.slice(0, _trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+    : string;
+}
+
+var _baseTrim = baseTrim;
+
 /** `Object#toString` result references. */
 var symbolTag$5 = '[object Symbol]';
 
@@ -20722,9 +20762,6 @@ var isSymbol_1$1 = isSymbol$2;
 
 /** Used as references for various `Number` constants. */
 var NAN$1 = 0 / 0;
-
-/** Used to match leading and trailing whitespace. */
-var reTrim$1 = /^\s+|\s+$/g;
 
 /** Used to detect bad signed hexadecimal string values. */
 var reIsBadHex$1 = /^[-+]0x[0-9a-f]+$/i;
@@ -20775,7 +20812,7 @@ function toNumber$1(value) {
   if (typeof value != 'string') {
     return value === 0 ? value : +value;
   }
-  value = value.replace(reTrim$1, '');
+  value = _baseTrim(value);
   var isBinary = reIsBinary$1.test(value);
   return (isBinary || reIsOctal$1.test(value))
     ? freeParseInt$1(value.slice(2), isBinary ? 2 : 8)
@@ -23353,10 +23390,11 @@ function equalArrays$1(array, other, bitmask, customizer, equalFunc, stack) {
   if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
     return false;
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(array);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
   }
   var index = -1,
       result = true,
@@ -23721,10 +23759,11 @@ function equalObjects$1(object, other, bitmask, customizer, equalFunc, stack) {
       return false;
     }
   }
-  // Assume cyclic values are equal.
-  var stacked = stack.get(object);
-  if (stacked && stack.get(other)) {
-    return stacked == other;
+  // Check that cyclic values are equal.
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
   }
   var result = true;
   stack.set(object, other);
