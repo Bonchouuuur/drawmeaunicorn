@@ -36,4 +36,4 @@ class MyComponent extends Component {
 
 ## License
 
-MIT © [Bonchouuur](https://github.com/Bonchouuur)
+MIT © [Bonchouuur](https://github.com/Bonchouuuur)
